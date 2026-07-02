@@ -9,19 +9,32 @@ SKILLS_README_SOURCE="${WORKSPACE_ROOT}/.agents/skills/README.md"
 WORKSPACE_REVISION="unknown"
 DRY_RUN=false
 
+usage() {
+  cat <<'USAGE'
+Usage: ./scripts/sync/shared-skills.sh [--dry-run] [repo...]
+
+Sync workspace-owned shared agent skills into configured child repositories.
+Limit sync to specific repositories by name by passing one or more repo filters.
+USAGE
+}
+
+REPO_FILTERS=()
 for arg in "$@"; do
   case "${arg}" in
     --dry-run)
       DRY_RUN=true
       ;;
     -h|--help)
-      echo "Usage: $0 [--dry-run]"
+      usage
       exit 0
       ;;
-    *)
+    --*)
       echo "Error: unknown argument ${arg}" >&2
-      echo "Usage: $0 [--dry-run]" >&2
+      usage >&2
       exit 1
+      ;;
+    *)
+      REPO_FILTERS+=("${arg}")
       ;;
   esac
 done
@@ -47,6 +60,22 @@ strip_quotes() {
   value="${value%\'}"
   value="${value#\'}"
   printf '%s' "$value"
+}
+
+includes_repo() {
+  local repo_name="$1"
+  if [[ ${#REPO_FILTERS[@]} -eq 0 ]]; then
+    return 0
+  fi
+
+  local filter
+  for filter in "${REPO_FILTERS[@]}"; do
+    if [[ "${filter}" == "${repo_name}" ]]; then
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 REPO_NAMES=()
@@ -98,9 +127,16 @@ if [[ "${DRY_RUN}" == true ]]; then
   echo "Dry run: no files will be written"
 fi
 
+matched_filters=()
+
 for i in "${!REPO_NAMES[@]}"; do
   repo_name="${REPO_NAMES[$i]}"
   repo_path="${REPO_PATHS[$i]}"
+
+  if ! includes_repo "${repo_name}"; then
+    continue
+  fi
+  matched_filters+=("${repo_name}")
 
   if [[ "${repo_path}" = /* ]]; then
     target_repo="${repo_path}"
@@ -138,3 +174,19 @@ for i in "${!REPO_NAMES[@]}"; do
 
   echo "Synced shared skills -> ${repo_name} (${target_shared})"
 done
+
+if [[ ${#REPO_FILTERS[@]} -gt 0 ]]; then
+  for filter in "${REPO_FILTERS[@]}"; do
+    found=false
+    for matched in "${matched_filters[@]}"; do
+      if [[ "${filter}" == "${matched}" ]]; then
+        found=true
+        break
+      fi
+    done
+    if [[ "${found}" == false ]]; then
+      echo "Error: unknown repository filter ${filter}" >&2
+      exit 1
+    fi
+  done
+fi

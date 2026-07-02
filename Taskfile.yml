@@ -21,6 +21,7 @@ tasks:
     cmds:
       - ./scripts/workspace/bootstrap.mjs
       - ./scripts/workspace/doctor.mjs
+      - ./scripts/sync/githooks.sh
 
   agent-harness:validate:
     desc: Validate workspace agent harness and shared skills
@@ -42,6 +43,11 @@ tasks:
     cmds:
       - node scripts/harness/check-conventional-commits.mjs {{.CLI_ARGS}}
 
+  hooks:setup:
+    desc: Configure Git hooks for the workspace and child repositories
+    cmds:
+      - ./scripts/sync/githooks.sh {{.CLI_ARGS}}
+
   sync-skills:
     desc: Sync shared skills into configured child repositories
     cmds:
@@ -56,6 +62,11 @@ tasks:
     desc: Sync shared GitHub issue and pull request templates into configured child repositories
     cmds:
       - ./scripts/sync/github-templates.sh {{.CLI_ARGS}}
+
+  sync-githooks:
+    desc: Configure shared Git hooks for configured repositories
+    cmds:
+      - ./scripts/sync/githooks.sh {{.CLI_ARGS}}
 
   workspace:status:
     desc: Show parent and child repository status

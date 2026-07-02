@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+hook_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+workspace_root=$(dirname "$hook_dir")
+
+exec node "$workspace_root/scripts/harness/check-conventional-commits.mjs" --file "$1"

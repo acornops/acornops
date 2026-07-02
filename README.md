@@ -50,7 +50,7 @@ For single-repository work, agents should still read that child repository's
 - workspace setup and validation helpers
 - shared agent skills used across AcornOps repositories
 - workspace manifest and repository capability summary
-- synchronization tooling for shared skills and GitHub templates
+- synchronization tooling for shared skills, GitHub templates, and Git hooks
 - cross-repository harness and contract checks
 - vendor-neutral handoff and Conventional Commit policy
 
@@ -72,6 +72,7 @@ acornops/
   AGENTS.md
   CLAUDE.md
   workspace.yaml
+  .githooks/
   .github/
     ISSUE_TEMPLATE/
     PULL_REQUEST_TEMPLATE/
@@ -116,7 +117,8 @@ task setup
 
 `task setup` clones missing child repositories from `workspace.yaml` over HTTPS,
 normalizes existing matching GitHub remotes to the workspace manifest, and then
-checks local tools, child repository remotes, and workspace status.
+checks local tools, child repository remotes, workspace status, and shared Git
+hook configuration.
 
 Understand the platform:
 
@@ -167,6 +169,17 @@ task workspace:update
 `task workspace:update` skips repositories with local changes, repositories on
 non-default branches, branches with unpushed commits, and divergent histories.
 
+Configure the workspace-owned Git hooks for the parent and child repositories:
+
+```bash
+task hooks:setup
+```
+
+The shared pre-commit hook does not auto-sync files. It runs
+`node scripts/harness/check-sync-drift.mjs --staged` for parent workspace
+commits and prints the relevant sync command when shared skills, GitHub
+templates, Claude settings, or Git hooks are stale.
+
 ## Validate
 
 ```bash
@@ -186,7 +199,8 @@ node scripts/harness/check-platform-contracts.mjs
 
 Commit subjects and pull request titles must follow
 [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
-See [Conventional Commits](docs/agent-harness/conventional-commits.md).
+Run `task hooks:setup` to install the shared `commit-msg` hook locally. See
+[Conventional Commits](docs/agent-harness/conventional-commits.md).
 
 ## Coordinated Changes
 

@@ -26,6 +26,13 @@ expect_absent_path() {
   fi
 }
 
+expect_executable() {
+  local file="$1"
+  if [[ ! -x "${ROOT_DIR}/${file}" ]]; then
+    failures+=("Required executable file ${file} is missing or not executable")
+  fi
+}
+
 expect_contains() {
   local file="$1"
   local needle="$2"
@@ -51,6 +58,8 @@ required_files=(
   ".github/PULL_REQUEST_TEMPLATE/docs-maintenance.md"
   ".github/ISSUE_TEMPLATE/cross-repo-change.md"
   ".github/ISSUE_TEMPLATE/docs-maintenance.md"
+  ".githooks/commit-msg"
+  ".githooks/pre-commit"
   "workspace.yaml"
   "change-sets/README.md"
   "change-sets/active/.gitkeep"
@@ -60,12 +69,14 @@ required_files=(
   ".agents/skills/README.md"
   "scripts/harness/check-agent-harness.sh"
   "scripts/harness/check-conventional-commits.mjs"
+  "scripts/harness/check-sync-drift.mjs"
   "scripts/harness/check-platform-contracts.mjs"
   "scripts/harness/check-platform-harness.mjs"
   "scripts/lib/workspace.mjs"
   "scripts/docs-maintenance/collect-evidence.mjs"
   "scripts/docs-maintenance/start-copilot-task.mjs"
   "scripts/sync/claude-settings.sh"
+  "scripts/sync/githooks.sh"
   "scripts/sync/github-templates.sh"
   "scripts/sync/shared-skills.sh"
   "scripts/workspace/bootstrap.mjs"
@@ -92,6 +103,11 @@ required_files=(
 for file in "${required_files[@]}"; do
   expect_file "${file}"
 done
+
+expect_executable ".githooks/commit-msg"
+expect_executable ".githooks/pre-commit"
+expect_executable "scripts/harness/check-sync-drift.mjs"
+expect_executable "scripts/sync/githooks.sh"
 
 expect_dir ".agents/skills/shared"
 expect_absent_path "templates"
@@ -139,6 +155,7 @@ expect_contains "README.md" "task setup"
 expect_contains "README.md" "task workspace:bootstrap -- --dry-run"
 expect_contains "README.md" "task workspace:fetch"
 expect_contains "README.md" "task workspace:update"
+expect_contains "README.md" "task hooks:setup"
 expect_contains "README.md" "docs/system-architecture.md"
 expect_contains "README.md" "./scripts/workspace/doctor.mjs"
 expect_contains "README.md" "The sync command updates only"
@@ -158,6 +175,7 @@ expect_contains "workspace.yaml" "control-plane"
 expect_contains "workspace.yaml" "management-console"
 expect_contains "docs/agent-harness/agent-handoff-policy.md" "Conventional Commits"
 expect_contains "docs/agent-harness/conventional-commits.md" "scripts/harness/check-conventional-commits.mjs"
+expect_contains "docs/agent-harness/conventional-commits.md" ".githooks/commit-msg"
 expect_contains "docs/agent-harness/agent-handoff-policy.md" "exact commands run"
 expect_contains "docs/agent-harness/harness-adoption-guide.md" "Repo-local harness"
 expect_contains "docs/agent-harness/harness-adoption-guide.md" "Workspace harness"
@@ -181,6 +199,15 @@ expect_contains ".agents/skills/shared/open-pr/workflow.md" "check-conventional-
 expect_contains "scripts/sync/shared-skills.sh" "--dry-run"
 expect_contains "scripts/sync/claude-settings.sh" "--dry-run"
 expect_contains "scripts/sync/claude-settings.sh" "settings.local.json"
+expect_contains "scripts/sync/githooks.sh" "--dry-run"
+expect_contains "scripts/sync/githooks.sh" "core.hooksPath"
+expect_contains ".githooks/commit-msg" "check-conventional-commits.mjs"
+expect_contains ".githooks/pre-commit" "check-sync-drift.mjs"
+expect_contains "scripts/harness/check-sync-drift.mjs" "shared-skills.sh --dry-run"
+expect_contains "scripts/harness/check-sync-drift.mjs" "github-templates.sh --dry-run"
+expect_contains "scripts/harness/check-sync-drift.mjs" "claude-settings.sh --dry-run"
+expect_contains "scripts/harness/check-sync-drift.mjs" "githooks.sh --dry-run"
+expect_contains "docs/agent-harness/sync.md" "check-sync-drift.mjs --all"
 expect_contains "scripts/harness/check-platform-harness.mjs" "docs-website"
 expect_contains "scripts/harness/check-platform-harness.mjs" "assertSyncedTree"
 expect_contains "scripts/harness/check-platform-harness.mjs" "githubTemplateFiles"
@@ -208,6 +235,7 @@ expect_contains "change-sets/README.md" "merge order"
 expect_contains "change-sets/README.md" "ignored by default"
 expect_contains "docs/agent-harness/sync.md" "./scripts/sync/shared-skills.sh --dry-run"
 expect_contains "docs/agent-harness/sync.md" "./scripts/sync/claude-settings.sh --dry-run"
+expect_contains "docs/agent-harness/sync.md" "./scripts/sync/githooks.sh --dry-run"
 expect_contains "docs/agent-harness/docs-maintenance.md" "COPILOT_AGENT_PAT"
 expect_contains "docs/agent-harness/docs-maintenance.md" "not uploaded as a GitHub Actions artifact"
 expect_contains "docs/agent-harness/docs-maintenance.md" "If no evidence-backed updates are needed"

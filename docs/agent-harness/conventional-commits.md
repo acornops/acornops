@@ -51,6 +51,14 @@ The workspace provides `scripts/harness/check-conventional-commits.mjs` for
 commit-message and PR-title validation. The root workspace CI validates pull
 request titles and pushed commit messages with this script.
 
+The shared `.githooks/commit-msg` hook runs the same checker against Git's
+commit message file before a local commit is accepted. Configure the hook for
+the parent workspace and child repositories with:
+
+```bash
+task hooks:setup
+```
+
 Child repositories should adopt the same rule in their local CI or commit
 workflow. Existing historical commits are not rewritten; enforcement applies to
 new commits and pull requests.

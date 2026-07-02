@@ -6,9 +6,66 @@ The workspace has separate sync scripts for separate ownership surfaces:
 - `scripts/sync/github-templates.sh` syncs shared GitHub issue and pull request
   templates.
 - `scripts/sync/claude-settings.sh` syncs the shared `.claude/settings.json`.
+- `scripts/sync/githooks.sh` configures repositories to use the shared
+  `.githooks` directory.
 
 Keep these scripts separate so a change to one surface cannot accidentally
 overwrite another.
+
+## Git Hook Setup
+
+`scripts/sync/githooks.sh` configures the parent workspace and child
+repositories to use the workspace-owned `.githooks` directory through Git's
+local `core.hooksPath` setting.
+
+Preview configuration changes first:
+
+```bash
+./scripts/sync/githooks.sh --dry-run
+```
+
+Apply configuration:
+
+```bash
+./scripts/sync/githooks.sh
+```
+
+### What It Configures
+
+```text
+core.hooksPath -> <workspace>/.githooks
+```
+
+The script writes local Git config only. It does not copy hook files into child
+repositories and does not create commits. New hook files can be added to
+`.githooks/` later, such as `pre-commit`, `pre-push`, or
+`prepare-commit-msg`, without changing each repository's Git config again.
+
+### What It Does Not Sync
+
+- child repository `.git/hooks` files
+- GitHub branch protection or repository settings
+- standalone child-repository hook installation outside the workspace checkout
+
+Run this setup again after moving the workspace directory, after cloning a new
+child repository, or after adding a new local clone to `workspace.yaml`.
+
+The shared `.githooks/pre-commit` hook runs only in the parent workspace repo
+and delegates to `node scripts/harness/check-sync-drift.mjs --staged`. When
+staged changes touch a shared sync surface, the checker verifies the relevant
+child repository outputs or local hook configuration. If they are stale, it
+fails with the exact sync command to run instead of modifying files during
+commit.
+
+The hook is the normal enforcement point, so agents and developers do not need
+to memorize every sync trigger. When it blocks a commit, run the sync command it
+prints, review the resulting repository changes, then retry the commit.
+
+To audit all sync surfaces without staging a commit, run:
+
+```bash
+node scripts/harness/check-sync-drift.mjs --all
+```
 
 ## Shared Skill Sync
 
@@ -25,6 +82,12 @@ Apply changes:
 
 ```bash
 ./scripts/sync/shared-skills.sh
+```
+
+Limit sync to specific repositories by name:
+
+```bash
+./scripts/sync/shared-skills.sh --dry-run docs-website
 ```
 
 ## What It Syncs

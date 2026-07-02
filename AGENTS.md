@@ -93,12 +93,6 @@ local validation and handoff rules.
 - `./scripts/workspace/doctor.mjs` for local workspace readiness
 - `./scripts/workspace/status.mjs` for workspace state inspection
 - `task validate` when Task is installed
-- `./scripts/sync/shared-skills.sh --dry-run` when shared skills or workspace
-  manifest entries change
-- `./scripts/sync/github-templates.sh --dry-run` when shared GitHub issue or
-  pull request templates change
-- `./scripts/sync/claude-settings.sh --dry-run` when the shared
-  `.claude/settings.json` changes
 
 ## High-Risk Areas
 
