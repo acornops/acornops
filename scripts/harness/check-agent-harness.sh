@@ -19,6 +19,13 @@ expect_dir() {
   fi
 }
 
+expect_absent_path() {
+  local path="$1"
+  if [[ -e "${ROOT_DIR}/${path}" ]]; then
+    failures+=("Unexpected retired path ${path}")
+  fi
+}
+
 expect_contains() {
   local file="$1"
   local needle="$2"
@@ -80,30 +87,6 @@ required_files=(
   "docs/agent-harness/repository-capability-summary.md"
   "docs/agent-harness/skill-authoring-guide.md"
   "docs/agent-harness/sync.md"
-  "templates/repository/AGENTS.md"
-  "templates/repository/.agents/skills/README.md"
-  "templates/repository/.agents/skills/shared/.gitkeep"
-  "templates/repository/.agents/skills/local/.gitkeep"
-  "templates/repository/ARCHITECTURE.md"
-  "templates/repository/docs/index.md"
-  "templates/repository/docs/DEVELOPMENT.md"
-  "templates/repository/docs/OPERATIONS.md"
-  "templates/repository/docs/DESIGN.md"
-  "templates/repository/docs/PLANS.md"
-  "templates/repository/docs/AGENT_HANDOFF.md"
-  "templates/repository/docs/QUALITY_SCORE.md"
-  "templates/repository/docs/RELIABILITY.md"
-  "templates/repository/docs/SECURITY.md"
-  "templates/repository/docs/contracts/README.md"
-  "templates/repository/docs/contracts/manifest.json"
-  "templates/repository/docs/design-docs/index.md"
-  "templates/repository/docs/product-specs/index.md"
-  "templates/repository/docs/product-specs/component-charter.md"
-  "templates/repository/docs/references/index.md"
-  "templates/repository/docs/generated/README.md"
-  "templates/repository/docs/exec-plans/active/README.md"
-  "templates/repository/docs/exec-plans/completed/README.md"
-  "templates/repository/docs/exec-plans/tech-debt-tracker.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -111,6 +94,7 @@ for file in "${required_files[@]}"; do
 done
 
 expect_dir ".agents/skills/shared"
+expect_absent_path "templates"
 
 for skill_dir in "${ROOT_DIR}"/.agents/skills/shared/*; do
   [[ -d "${skill_dir}" ]] || continue
@@ -185,12 +169,8 @@ expect_contains "docs/developer-getting-started.md" "Agent-Assisted Development"
 expect_contains "docs/developer-getting-started.md" "task workspace:fetch"
 expect_contains "docs/developer-getting-started.md" "task workspace:update"
 expect_contains "docs/developer-getting-started.md" "Repo-Local Work"
-expect_contains "templates/repository/AGENTS.md" "Agent tools may not auto-discover nested skills"
-expect_contains "templates/repository/AGENTS.md" "Agent-Assisted Development"
-expect_contains "templates/repository/AGENTS.md" "acornops-workspace"
-expect_contains "templates/repository/docs/AGENT_HANDOFF.md" "Use Conventional Commits 1.0.0"
-expect_contains "templates/repository/.agents/skills/README.md" 'Do not edit `.agents/skills/shared` directly'
-expect_contains "templates/repository/.agents/skills/README.md" "acornops-workspace"
+expect_contains ".agents/skills/README.md" 'do not edit it directly'
+expect_contains ".agents/skills/README.md" 'The parent workspace does not keep a `.agents/skills/local` directory'
 expect_contains ".agents/skills/shared/contract-change/SKILL.md" "docs/contracts"
 expect_contains ".agents/skills/shared/workspace-maintenance/SKILL.md" "workspace.yaml"
 expect_contains ".agents/skills/shared/testing-validation/SKILL.md" "handoff evidence"
@@ -201,6 +181,9 @@ expect_contains ".agents/skills/shared/open-pr/workflow.md" "check-conventional-
 expect_contains "scripts/sync/shared-skills.sh" "--dry-run"
 expect_contains "scripts/sync/claude-settings.sh" "--dry-run"
 expect_contains "scripts/sync/claude-settings.sh" "settings.local.json"
+expect_contains "scripts/harness/check-platform-harness.mjs" "docs-website"
+expect_contains "scripts/harness/check-platform-harness.mjs" "assertSyncedTree"
+expect_contains "scripts/harness/check-platform-harness.mjs" "githubTemplateFiles"
 expect_contains "scripts/harness/check-conventional-commits.mjs" "Conventional commit checks passed"
 expect_contains ".github/workflows/ci.yml" "Validate pull request title"
 expect_contains ".github/workflows/ci.yml" "Validate pushed commit messages"
@@ -237,7 +220,6 @@ if grep -R "${legacy_path_pattern}" \
   "${ROOT_DIR}/Taskfile.yml" \
   "${ROOT_DIR}/scripts" \
   "${ROOT_DIR}/.agents" \
-  "${ROOT_DIR}/templates" \
   "${ROOT_DIR}/docs/agent-harness" >/dev/null 2>&1; then
   failures+=("Parent-owned workspace files must not reference legacy standards repository paths")
 fi

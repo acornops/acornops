@@ -3,7 +3,8 @@
 ## Scope
 
 The parent workspace repository owns shared AcornOps agent harness standards,
-reusable skills, repository templates, workspace validation, and sync tooling.
+reusable skills, shared GitHub templates, workspace validation, and sync
+tooling.
 
 It does not own repository-specific architecture, contracts, product behavior, or local validation commands.
 
@@ -74,10 +75,14 @@ Apply shared GitHub template sync:
 
 ## Change Rules
 
-- Update templates when changing required repository harness shape.
+- Update `docs/agent-harness/harness-adoption-guide.md` and
+  `scripts/harness/check-platform-harness.mjs` when changing required
+  repository harness shape.
 - Update `.github/PULL_REQUEST_TEMPLATE/` and `.github/ISSUE_TEMPLATE/` when
   changing shared pull request or issue intake shape.
-- Update `scripts/harness/check-agent-harness.sh` when adding required template files or policy text.
+- Update `.agents/skills/README.md` when changing shared skill layout guidance.
+- Update `scripts/harness/check-agent-harness.sh` when adding required
+  workspace files or policy text.
 - Update `docs/agent-harness/harness-adoption-guide.md` when the product-repo adoption model changes.
 - Keep shared issue templates free of default labels or assignees unless the
   corresponding repository settings are managed across all child repositories.
@@ -91,6 +96,9 @@ The workspace repo is the upstream source for doc structure. Product repos shoul
 
 ## Documentation Drift Control
 
-Treat documentation as part of feature acceptance. When a standards change affects repo shape, shared skills, validation flow, agent handoff, sync behavior, or required files, update the relevant docs and templates in the same change.
+Treat documentation as part of feature acceptance. When a standards change
+affects repo shape, shared skills, validation flow, agent handoff, sync
+behavior, or required files, update the relevant durable docs and harness checks
+in the same change.
 
 If docs are intentionally unchanged, record `Docs impact: none` and the reason in handoff evidence.

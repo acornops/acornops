@@ -1,6 +1,6 @@
 ---
 name: acornops-workspace-maintenance
-description: Maintain the AcornOps workspace harness and developer entrypoint. Use when editing workspace.yaml, Taskfile.yml, root README/AGENTS/CLAUDE files, .gitignore, change-sets, templates, shared skills, workspace scripts, harness checks, sync tooling, CI policy, or Codex hook configuration. Do not use for product code inside child repositories.
+description: Maintain the AcornOps workspace harness and developer entrypoint. Use when editing workspace.yaml, Taskfile.yml, root README/AGENTS/CLAUDE files, .gitignore, change-sets, shared skills, shared GitHub templates, workspace scripts, harness checks, sync tooling, CI policy, or Codex hook configuration. Do not use for product code inside child repositories.
 ---
 
 # Inputs
@@ -16,7 +16,7 @@ description: Maintain the AcornOps workspace harness and developer entrypoint. U
 2. Inspect existing scripts, Task tasks, docs, and harness checks before adding new patterns.
 3. Keep developer-facing commands Task-first and scripts as stable lower-level APIs.
 4. Preserve child repository independence: do not track child repo contents in the parent.
-5. Update harness checks when adding required files, policy text, templates, or scripts.
+5. Update harness checks when adding required files, policy text, shared templates, or scripts.
 6. Run targeted workspace validation and report any existing unrelated blockers separately.
 
 # Outputs

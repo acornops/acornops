@@ -18,12 +18,11 @@ Durable repository-specific knowledge belongs in each child repository.
 - [Repository Capability Summary](docs/agent-harness/repository-capability-summary.md)
 - [Skill Authoring Guide](docs/agent-harness/skill-authoring-guide.md)
 - [Shared Skills](.agents/skills/shared/)
-- [Repository Templates](templates/repository/)
 
 ## Workspace Ownership
 
 - This parent repository owns cross-repository orchestration, shared skills,
-  workspace validation, repository templates, and cross-repo agent policy.
+  workspace validation, shared GitHub templates, and cross-repo agent policy.
 - Child repositories own product code, service architecture, service contracts,
   repo-local validation, and repo-local skills.
 - Parent-level `security/`, `security-completed/`, and `optimizations/` folders

@@ -35,7 +35,7 @@ When a doc structure changes:
 
 - update the relevant repository docs
 - update the repository harness check
-- update `templates/repository/`
+- update the workspace harness docs when the structure is shared
 - update `scripts/harness/check-agent-harness.sh`
 - run the repository validation command
 

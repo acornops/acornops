@@ -38,7 +38,14 @@ Each product repository should commit its own:
 - one canonical validation command
 
 The repository-local files are authoritative for that repository. Shared
-templates provide structure only.
+workspace docs define the expected shape, but each repository owns its concrete
+architecture, contracts, validation scripts, and operating details.
+
+The public documentation site is a docs-site harness profile, not a product
+service profile. It should still commit `AGENTS.md`, shared skills, GitHub
+templates, and one canonical validation command, but it does not need the full
+repo-local `docs/` knowledge-base tree because its root MDX files are the
+published documentation surface.
 
 For whole-system topology, use one canonical owner instead of duplicating large
 diagrams in every repo. In AcornOps, that owner is
@@ -66,6 +73,9 @@ directory. Do not place repo-owned skills or custom files under
 
 The sync writes `.agents/skills/shared/.standards-version` so a product repo can
 see which standards revision last populated shared skills.
+`scripts/harness/check-platform-harness.mjs` compares the synced shared skills
+and skills README against the workspace source so stale or partially synced
+child repositories fail platform harness validation.
 
 ## Shared GitHub templates
 
@@ -88,14 +98,9 @@ The GitHub template sync copies only allowlisted template files. It does not
 sync `.github/workflows`, delete child-owned `.github` files, or replace
 repository-specific automation. Shared issue templates do not set default
 labels or assignees; those are repository-specific GitHub settings.
-
-## Template adoption
-
-Use `templates/repository/` when bootstrapping or improving a repository harness.
-Copy missing files, then replace placeholders with concrete repository facts.
-
-Do not use templates as live includes. A product repository should continue to
-work when checked out alone.
+`scripts/harness/check-platform-harness.mjs` also compares these allowlisted
+templates against every workspace child repository, including the docs-site
+profile.
 
 ## Validation strategy
 
@@ -148,7 +153,7 @@ better organization-wide rule.
 
 ## Recommended update flow
 
-1. Update shared skills, GitHub templates, or repository templates here.
+1. Update shared skills, GitHub templates, harness docs, or harness checks here.
 2. Run `./scripts/harness/check-agent-harness.sh`.
 3. Sync shared skills with `./scripts/sync/shared-skills.sh` when needed.
 4. Sync GitHub templates with `./scripts/sync/github-templates.sh` when needed.

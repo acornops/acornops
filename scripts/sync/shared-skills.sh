@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 MANIFEST_FILE="${WORKSPACE_ROOT}/workspace.yaml"
 SHARED_SKILLS_SOURCE="${WORKSPACE_ROOT}/.agents/skills/shared"
-SKILLS_README_SOURCE="${WORKSPACE_ROOT}/templates/repository/.agents/skills/README.md"
+SKILLS_README_SOURCE="${WORKSPACE_ROOT}/.agents/skills/README.md"
 WORKSPACE_REVISION="unknown"
 DRY_RUN=false
 

@@ -17,9 +17,9 @@
 
 This repository is the developer entry point for working across AcornOps
 repositories. It owns the workspace manifest, setup and validation helpers,
-shared repository templates, shared GitHub templates, and cross-repository
-documentation. It does not own product source code. Product repositories are
-checked out as ignored child directories and remain independently versioned.
+shared skills, shared GitHub templates, and cross-repository documentation. It
+does not own product source code. Product repositories are checked out as
+ignored child directories and remain independently versioned.
 
 ## Workspace Model
 
@@ -50,7 +50,6 @@ For single-repository work, agents should still read that child repository's
 - workspace setup and validation helpers
 - shared agent skills used across AcornOps repositories
 - workspace manifest and repository capability summary
-- repository harness templates
 - synchronization tooling for shared skills and GitHub templates
 - cross-repository harness and contract checks
 - vendor-neutral handoff and Conventional Commit policy
@@ -79,8 +78,6 @@ acornops/
   .agents/skills/shared/
   docs/
     agent-harness/
-  templates/
-    repository/
   scripts/
     docs-maintenance/
     harness/

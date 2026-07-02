@@ -30,7 +30,7 @@ Generate a plan before publishing:
 ./scripts/workspace/pr-plan.mjs <repo...>
 ```
 
-Use `templates/pr/cross-repo-pr.md` as the body structure.
+Use `.github/PULL_REQUEST_TEMPLATE/cross-repo.md` as the body structure.
 For single-repo PRs, keep the cross-repo section short and state `None`.
 
 ## Publishing

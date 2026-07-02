@@ -1,13 +1,16 @@
-# AcornOps Workspace Skills
+# AcornOps Skills
 
-Shared skills in `.agents/skills/shared` are owned by the parent workspace repo.
-Repo-local skills belong in each child repository under `.agents/skills/local`.
-The parent workspace intentionally does not use `.agents/skills/local`; skills
-kept here are syncable workspace skills unless documented otherwise.
+Shared skills live in `.agents/skills/shared`. Repo-local skills belong in
+`.agents/skills/local`.
 
-Do not edit child repository `.agents/skills/shared` files directly. Update the
-workspace copy, run `./scripts/sync/shared-skills.sh --dry-run`, review the
+In `acornops-workspace`, `.agents/skills/shared` is the upstream source that is
+synced into child repositories. In child repositories,
+`.agents/skills/shared` is generated output; do not edit it directly. Update
+the workspace copy, run `./scripts/sync/shared-skills.sh --dry-run`, review the
 target repositories, then run the sync intentionally.
+
+The parent workspace does not keep a `.agents/skills/local` directory. Child
+repositories may use `.agents/skills/local` for repository-owned skills.
 
 ## Shared Skill Boundaries
 
@@ -27,4 +30,5 @@ target repositories, then run the sync intentionally.
 - `testing-validation`: choosing and running risk-appropriate validation after a
   change is implemented.
 - `workspace-maintenance`: root workspace manifest, Taskfile, scripts, harness
-  checks, templates, shared skills, CI policy, and setup/update tooling.
+  checks, shared skills, shared GitHub templates, CI policy, and setup/update
+  tooling.

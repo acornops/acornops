@@ -31,10 +31,13 @@ Apply changes:
 
 ```text
 .agents/skills/shared/ -> <repo>/.agents/skills/shared/
+.agents/skills/README.md -> <repo>/.agents/skills/README.md
 ```
 
 The destination shared directory is replaced with `rsync --delete` so removed
-shared skills disappear from product repositories.
+shared skills disappear from product repositories. The skills README is copied
+from the workspace source so parent and child repositories describe the same
+shared/local skill boundary.
 
 After syncing, the script writes:
 
@@ -43,6 +46,11 @@ After syncing, the script writes:
 ```
 
 This records the workspace repository and git revision used for the sync.
+The platform harness check compares `.agents/skills/shared` and
+`.agents/skills/README.md` in every configured child repository against the
+workspace source. A missing skill, stale workflow, extra shared-skill file, or
+stale `.standards-version` revision fails
+`node scripts/harness/check-platform-harness.mjs`.
 
 ## What It Does Not Sync
 
@@ -156,6 +164,9 @@ configuration.
 The script copies only the allowlisted files and never runs `rsync --delete`
 against child `.github` directories. Review child repository diffs before
 committing synced template changes.
+The platform harness check compares these allowlisted template files in every
+configured child repository against the workspace source so missing or stale
+templates fail local validation.
 
 ## Organization Defaults
 

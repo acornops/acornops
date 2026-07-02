@@ -80,12 +80,11 @@ with the parent workspace repository.
 Only `.agents/skills/shared` is synced. Do not put repository-owned skills in
 that directory; use `.agents/skills/local` instead.
 
-## Template Versus Sync
+## Repo-Owned Harness Files
 
-Templates under `templates/repository/` are copied manually when bootstrapping or
-polishing a repository harness. They are not synced automatically because each
-repository must own its architecture docs, contracts, validation scripts, and
-local workflow details.
+Shared skill files are synced automatically. Repository architecture docs,
+contracts, validation scripts, local skills, and workflow details are not synced
+because each repository must own them directly.
 
 ## How Agents Should Invoke Skills
 

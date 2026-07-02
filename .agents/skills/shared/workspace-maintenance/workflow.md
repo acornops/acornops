@@ -12,7 +12,6 @@ Workspace-owned changes include:
 - `.gitignore`, `.github/`, and workspace CI policy
 - `scripts/harness`, `scripts/workspace`, `scripts/sync`, and `scripts/lib`
 - `.agents/skills/shared`
-- `templates/`
 - `docs/agent-harness/`
 - `change-sets/`
 
