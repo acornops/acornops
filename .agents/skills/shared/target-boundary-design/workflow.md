@@ -10,7 +10,7 @@ type such as VMs.
 - Kubernetes-specific implementation: kubeconfig, Kubernetes RBAC, namespaces,
   manifests, Helm, cluster agent behavior, Kubernetes API clients, and pod-level
   execution details.
-- VM-specific implementation: SSH or VM agent credentials, host probes, OS or
+- VM-specific implementation: SSH or AgentV credentials, host probes, OS or
   cloud policy, VM bootstrap, VM runner behavior, and VM lifecycle hooks.
 - Future extension point: capability interfaces and adapter contracts that let
   new target types attach without changing shared orchestration.

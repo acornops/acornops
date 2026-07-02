@@ -10,7 +10,7 @@ Primary Language: Bash + YAML
 Framework: Taskfile + Docker Compose orchestration
 Build Command: `task validate` (compose render validation) and `task local-up` or `task prod-up` for runtime assembly
 Test Command: `task validate`
-Deployment Model: Docker Compose profiles (`local`, `prod`), central Kubernetes platform Helm chart, and workload-cluster k8s-agent Helm rollout
+Deployment Model: Docker Compose profiles (`local`, `prod`), central Kubernetes platform Helm chart, and workload-cluster agentk Helm rollout
 Infrastructure Tools: Docker Compose, Task, Helm, kubectl, Kubernetes manifests
 
 ## Repository: control-plane
@@ -53,7 +53,7 @@ Canonical Validation: `npm run validate`
 Deployment Model: Docker multi-stage build with Nginx runtime, local Vite dev mode via compose override
 Infrastructure Tools: Docker Compose, Nginx, Vite
 
-## Repository: k8s-agent
+## Repository: agentk
 Purpose: Cluster-resident outbound-only Kubernetes agent for telemetry snapshots and JSON-RPC tool execution.
 Primary Language: TypeScript
 Framework: Node.js + ws + `@kubernetes/client-node`
@@ -63,8 +63,8 @@ Canonical Validation: `npm run validate`
 Deployment Model: Kubernetes manifests (`deploy/rbac.yaml`, `deploy/deployment.yaml`) and Docker Compose local mock platform
 Infrastructure Tools: Kubernetes RBAC/Deployment manifests, Docker Compose, k3d in CI
 
-## Repository: vm-agent
-Purpose: Outbound-only Linux/systemd VM agent for read-only host snapshots, diagnostics, and JSON-RPC tool execution.
+## Repository: agentv
+Purpose: Outbound-only Linux/systemd AgentV for read-only host snapshots, diagnostics, and JSON-RPC tool execution.
 Primary Language: TypeScript
 Framework: Node.js + ws with Linux/systemd collector adapters
 Build Command: `npm run build`

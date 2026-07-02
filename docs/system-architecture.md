@@ -31,8 +31,8 @@ flowchart LR
     GWRedis[(Gateway Redis)]
     OIDC[OIDC Provider]
     Providers[LLM Providers]
-    Agent[K8s Agent]
-    VMAgent[VM Agent]
+    Agent[AgentK]
+    AgentV[AgentV]
     Cluster[Workload Cluster]
     LinuxVM[Linux/systemd VM]
     RemoteMCP[Remote MCP Servers]
@@ -56,10 +56,10 @@ flowchart LR
 
     Agent -->|outbound WebSocket| CP
     Agent --> Cluster
-    VMAgent -->|outbound WebSocket| CP
-    VMAgent --> LinuxVM
+    AgentV -->|outbound WebSocket| CP
+    AgentV --> LinuxVM
     CP -->|JSON-RPC tool relay| Agent
-    CP -->|JSON-RPC tool relay| VMAgent
+    CP -->|JSON-RPC tool relay| AgentV
 ```
 
 ## How The Pieces Fit
@@ -85,10 +85,10 @@ connects to remote MCP servers and external LLM providers. The control plane
 uses gateway admin APIs to register tools and issues run-scoped credentials for
 execution-time access.
 
-The k8s agent and VM agent are outbound-only target agents. They connect back to
+AgentK and AgentV are outbound-only target agents. They connect back to
 the control plane over WebSocket, publish target snapshots, and receive
-JSON-RPC tool calls relayed by the control plane. The k8s agent operates inside
-workload clusters; the VM agent runs as a Linux/systemd process for VM targets.
+JSON-RPC tool calls relayed by the control plane. AgentK operates inside
+workload clusters; AgentV runs as a Linux/systemd process for VM targets.
 
 The deployment repository assembles these services into runnable topologies. It
 does not own component runtime code; it owns Compose and Kubernetes wiring,
@@ -118,7 +118,7 @@ and operator runbooks.
 
 ### Agent Tooling
 
-1. A k8s or VM agent connects outbound to the control plane WebSocket endpoint.
+1. AgentK or AgentV connects outbound to the control plane WebSocket endpoint.
 2. The agent publishes target identity, health, capabilities, and snapshots.
 3. The control plane records target state and routes target-scoped tool calls.
 4. The agent executes allowed JSON-RPC tools against its local target.
@@ -159,8 +159,8 @@ Internal-only services:
 - `execution-engine`: run worker and durable execution callbacks.
 - `llm-gateway`: LLM provider gateway, MCP broker, secrets backend,
   and gateway policy.
-- `k8s-agent`: workload-cluster agent and agent Helm chart.
-- `vm-agent`: read-only Linux/systemd VM agent, packaging, and local
+- `agentk`: workload-cluster agent and agent Helm chart.
+- `agentv`: read-only Linux/systemd VM agent, packaging, and local
   mock collectors.
 - `acornops-deployment`: full-stack deployment tracks, platform Helm chart,
   runbooks, and release matrix.
@@ -175,8 +175,8 @@ The system can be assembled in several ways, all owned by
   services
 - Docker-on-VM production deployment
 - central Kubernetes platform deployment
-- workload-cluster k8s-agent rollout
-- Linux/systemd VM agent installation
+- workload-cluster agentk rollout
+- Linux/systemd AgentV installation
 
 Use `acornops-deployment/docs/deployment-architecture.md` for topology,
 ingress, state, HA, and operator details for those tracks.

@@ -25,8 +25,8 @@ const manifests = {
   'management-console': readJson('management-console/docs/contracts/manifest.json'),
   'execution-engine': readJson('execution-engine/docs/contracts/manifest.json'),
   'llm-gateway': readJson('llm-gateway/docs/contracts/manifest.json'),
-  'k8s-agent': readJson('k8s-agent/docs/contracts/manifest.json'),
-  'vm-agent': readJson('vm-agent/docs/contracts/manifest.json')
+  'agentk': readJson('agentk/docs/contracts/manifest.json'),
+  'agentv': readJson('agentv/docs/contracts/manifest.json')
 };
 
 const failures = [];
@@ -59,8 +59,8 @@ for (const [repoName, manifest] of Object.entries(manifests)) {
 expectCounterpart('control-plane', 'management-console', 'management-console', 'control-plane');
 expectCounterpart('control-plane', 'execution-engine', 'execution-engine', 'control-plane');
 expectCounterpart('control-plane', 'llm-gateway', 'llm-gateway', 'control-plane');
-expectCounterpart('control-plane', 'k8s-agent', 'k8s-agent', 'control-plane');
-expectCounterpart('control-plane', 'vm-agent', 'vm-agent', 'control-plane');
+expectCounterpart('control-plane', 'agentk', 'agentk', 'control-plane');
+expectCounterpart('control-plane', 'agentv', 'agentv', 'control-plane');
 expectCounterpart('execution-engine', 'llm-gateway', 'llm-gateway', 'execution-engine');
 
 if (failures.length > 0) {

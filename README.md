@@ -91,8 +91,8 @@ acornops/
   control-plane/  # ignored child repo for the control plane API
   docs-website/  # ignored child repo for public Mintlify docs
   execution-engine/  # ignored child repo for run execution
-  k8s-agent/  # ignored child repo for workload-cluster agents
-  vm-agent/  # ignored child repo for Linux/systemd VM agent work
+  agentk/  # ignored child repo for workload-cluster agents
+  agentv/  # ignored child repo for Linux/systemd AgentV work
   llm-gateway/  # ignored child repo for model and MCP brokering
   management-console/  # ignored child repo for the browser console
 ```

@@ -39,8 +39,8 @@ The active child repositories are declared in [workspace.yaml](workspace.yaml):
 - `control-plane`
 - `docs-website`
 - `execution-engine`
-- `k8s-agent`
-- `vm-agent`
+- `agentk`
+- `agentv`
 - `llm-gateway`
 - `management-console`
 
