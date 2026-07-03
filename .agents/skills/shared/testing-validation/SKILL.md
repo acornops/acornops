@@ -12,8 +12,8 @@ description: Select and execute repository-appropriate validation for AcornOps c
 # Procedure
 
 1. Map changed files to required validation depth.
-2. Run mandatory static checks for the repository.
-3. Run unit and integration checks required by risk level.
+2. Run the repository validation entrypoint when it matches the risk.
+3. Add targeted checks required by changed behavior.
 4. Re-run targeted checks after fixes.
 5. Capture exact command outcomes.
 

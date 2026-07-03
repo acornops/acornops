@@ -16,10 +16,10 @@
 </p>
 
 This repository is the developer entry point for working across AcornOps
-repositories. It owns the workspace manifest, setup and validation helpers,
-shared skills, shared GitHub templates, and cross-repository documentation. It
-does not own product source code. Product repositories are checked out as
-ignored child directories and remain independently versioned.
+repositories. It owns the workspace manifest, setup helpers, shared skills,
+shared GitHub templates, and cross-repository documentation. It does not own
+product source code. Product repositories are checked out as ignored child
+directories and remain independently versioned.
 
 ## Workspace Model
 
@@ -29,10 +29,9 @@ AcornOps uses three layers:
 2. Repo-local harnesses committed to each standalone product repository.
 3. Platform and integration checks that validate cross-repository contracts.
 
-Start here when setting up the workspace, checking repository status, or running
-cross-repository validation. Agent-specific operating rules live in
-[AGENTS.md](AGENTS.md); `CLAUDE.md` imports that same file so agent-facing
-instructions stay in one place.
+Start here when setting up the workspace or checking repository status.
+Agent-specific operating rules live in [AGENTS.md](AGENTS.md); `CLAUDE.md`
+imports that same file so agent-facing instructions stay in one place.
 
 ## Agent-Assisted Development
 
@@ -47,7 +46,7 @@ For single-repository work, agents should still read that child repository's
 
 ## What Belongs Here
 
-- workspace setup and validation helpers
+- workspace setup helpers
 - shared agent skills used across AcornOps repositories
 - workspace manifest and repository capability summary
 - synchronization tooling for shared skills, GitHub templates, and Git hooks
@@ -60,7 +59,7 @@ For single-repository work, agents should still read that child repository's
 - repo-specific `AGENTS.md`
 - architecture and product docs
 - contract manifests owned by that repo
-- validation commands and CI workflows
+- CI workflows and local validation entrypoints
 - repo-specific local skills under `.agents/skills/local`
 - service-specific runbooks, migrations, and rollout notes
 - repository-specific labels and GitHub workflow secrets
@@ -175,13 +174,9 @@ Configure the workspace-owned Git hooks for the parent and child repositories:
 task hooks:setup
 ```
 
-The shared pre-commit hook does not auto-sync files. It runs
-`node scripts/harness/check-sync-drift.mjs --staged` for parent workspace
-commits and prints the relevant sync command when shared skills, GitHub
-templates, Claude settings, or Git hooks are stale.
-
-The shared pre-push hook runs available lint/style checks, repo-local harness
-checks, and the workspace platform harness before pushing.
+The shared hooks run deterministic local checks and print the relevant fix when
+they fail. Hook behavior is documented in
+[Sync](docs/agent-harness/sync.md).
 
 ## Validate
 
@@ -189,20 +184,9 @@ checks, and the workspace platform harness before pushing.
 task validate
 ```
 
-`task validate` runs the workspace harness, recent commit subject validation,
-child repository harness checks, and cross-repository contract checks. The
-underlying commands are:
+`task validate` runs the workspace harness and cross-repository checks.
 
-```bash
-./scripts/harness/check-agent-harness.sh
-node scripts/harness/check-conventional-commits.mjs --last 1
-node scripts/harness/check-platform-harness.mjs
-node scripts/harness/check-platform-contracts.mjs
-```
-
-Commit subjects and pull request titles must follow
-[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
-Run `task hooks:setup` to install the shared `commit-msg` hook locally. See
+Commit subjects and pull request titles follow
 [Conventional Commits](docs/agent-harness/conventional-commits.md).
 
 ## Coordinated Changes
@@ -212,7 +196,7 @@ For changes that touch more than one product repository:
 - identify the affected repositories from `workspace.yaml`
 - keep product code changes inside the child repositories
 - record coordinated work in `change-sets/` when the work spans repos
-- run each affected repo's validation plus workspace/platform checks
+- prepare validation evidence for each affected repo
 - link related PRs and include merge order when changes depend on each other
 
 Agent-facing workflow details and helper-script usage belong in

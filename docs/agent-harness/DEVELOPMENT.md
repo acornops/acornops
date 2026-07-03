@@ -3,10 +3,10 @@
 ## Scope
 
 The parent workspace repository owns shared AcornOps agent harness standards,
-reusable skills, shared GitHub templates, workspace validation, and sync
-tooling.
+reusable skills, shared GitHub templates, and sync tooling.
 
-It does not own repository-specific architecture, contracts, product behavior, or local validation commands.
+It does not own repository-specific architecture, contracts, product behavior,
+or local validation commands.
 
 ## Local Development
 
@@ -25,7 +25,7 @@ Check local tools, remotes, and checkout readiness:
 ./scripts/workspace/doctor.mjs
 ```
 
-Validate standards:
+Validate workspace standards:
 
 ```bash
 ./scripts/harness/check-agent-harness.sh

@@ -18,7 +18,7 @@ AcornOps adapts that model into repo-local harness rules so agents have stable e
 3. Whole-system context has one owner: `docs/system-architecture.md` in the
    workspace root.
 4. Agent instructions stay vendor-neutral. Do not add required vendor-specific files such as `CLAUDE.md`, `GEMINI.md`, `.cursor`, or `.cursorrules`.
-5. Handoff evidence names exact commands run and outcomes.
+5. Handoff evidence names meaningful commands run and outcomes.
 6. Harness checks enforce structure so documentation drift fails local validation.
 7. Documentation is part of feature acceptance: feature, API, configuration, deployment, operations, security, and reliability changes update the nearest durable docs in the same change.
 
@@ -37,6 +37,6 @@ When a doc structure changes:
 - update the repository harness check
 - update the workspace harness docs when the structure is shared
 - update `scripts/harness/check-agent-harness.sh`
-- run the repository validation command
+- run the relevant repository validation entrypoint
 
 This keeps future agent-authored documentation changes inside the same structure instead of letting each repo drift independently.

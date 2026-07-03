@@ -17,7 +17,7 @@ description: Commit and open AcornOps pull requests from the workspace. Use when
 2. Refuse broad all-repo commits with a generic message; commit each touched repo separately.
 3. Confirm each affected repo is on the intended branch, or create the branch when explicitly publishing current work.
 4. Review each repo diff before staging; do not stage unrelated user changes.
-5. Write and validate a Conventional Commit message per repo based on that repo's diff.
+5. Write a Conventional Commit message per repo based on that repo's diff.
 6. Ensure validation evidence exists; run missing required checks before publishing unless the user explicitly waives them.
 7. Generate a PR plan with `./scripts/workspace/pr-plan.mjs <repo...>`.
 8. Push each affected branch and open a draft PR for each repo using `./scripts/workspace/open-pr.mjs` when `gh` is available, or the GitHub connector as fallback.

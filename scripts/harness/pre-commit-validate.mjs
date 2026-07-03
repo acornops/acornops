@@ -29,16 +29,22 @@ function taskfileHasTask(repoPath, taskName) {
 function runPackageChecks(repoName, repoPath) {
   const scripts = packageScripts(repoPath);
 
-  if (scripts['harness:check']) run('npm run harness:check', repoPath, repoName);
+  if (scripts.lint) run('npm run lint', repoPath, repoName);
+  if (scripts['style:check']) run('npm run style:check', repoPath, repoName);
 }
 
 function runTaskChecks(repoName, repoPath) {
-  if (taskfileHasTask(repoPath, 'harness:check')) run('task harness:check', repoPath, repoName);
+  if (taskfileHasTask(repoPath, 'lint')) run('task lint', repoPath, repoName);
 }
 
-function runWorkspaceHarness() {
-  run('./scripts/harness/check-agent-harness.sh', workspaceRoot, 'acornops-workspace');
-  run('node scripts/harness/check-platform-harness.mjs', workspaceRoot, 'acornops-workspace');
+function checkAgentsLineLimit(repoName, repoPath) {
+  const agentsPath = path.join(repoPath, 'AGENTS.md');
+  if (!existsSync(agentsPath)) return;
+
+  const lineCount = readFileSync(agentsPath, 'utf8').split('\n').length;
+  if (lineCount > 140) {
+    throw new Error(`${repoName}: AGENTS.md has ${lineCount} lines; keep it at 140 lines or fewer and move details into linked docs.`);
+  }
 }
 
 const repoRoot = gitOutput(['rev-parse', '--show-toplevel']);
@@ -47,18 +53,18 @@ const repo = repoRoot === workspaceRoot
   : loadWorkspace().find((candidate) => candidate.absolutePath === repoRoot);
 
 if (!repo) {
-  console.log(`Repository ${repoRoot} is not managed by ${workspaceRoot}/workspace.yaml; skipping AcornOps pre-push validation.`);
+  console.log(`Repository ${repoRoot} is not managed by ${workspaceRoot}/workspace.yaml; skipping AcornOps pre-commit validation.`);
   process.exit(0);
 }
 
 try {
   runPackageChecks(repo.name, repo.absolutePath);
   runTaskChecks(repo.name, repo.absolutePath);
-  runWorkspaceHarness();
+  checkAgentsLineLimit(repo.name, repo.absolutePath);
 } catch (error) {
-  console.error('\nPre-push validation failed.');
+  console.error('\nPre-commit validation failed.');
   console.error(error.message);
-  console.error('\nThe command output above should identify the failing harness rule or file. Fix the harness failure, then retry push.');
-  console.error('Use git push --no-verify only for an intentional emergency bypass.');
+  console.error('\nThe command output above should identify the failing files or rule. Fix the lint/style or AGENTS.md line-limit issue, then retry commit.');
+  console.error('Use git commit --no-verify only for an intentional emergency bypass.');
   process.exit(1);
 }

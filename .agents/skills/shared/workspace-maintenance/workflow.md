@@ -34,7 +34,6 @@ Run the narrowest useful checks first:
 
 ```bash
 ./scripts/harness/check-agent-harness.sh
-node scripts/harness/check-conventional-commits.mjs --message "<type(scope): summary>"
 ```
 
 Run broader checks when the change touches harness adoption, contracts, or shared

@@ -17,7 +17,6 @@ changed. Child repos should be committed independently.
 
 - Use one commit per affected repo unless the repo has clearly separable changes.
 - Use Conventional Commit format: `type(scope): summary`.
-- Validate commit messages with `node scripts/harness/check-conventional-commits.mjs --message "<subject>"` when publishing from the workspace.
 - Never use one generic commit message across all repos.
 - Do not stage files that were dirty before the current task unless the user
   explicitly includes them.

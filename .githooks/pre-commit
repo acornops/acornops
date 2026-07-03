@@ -6,7 +6,8 @@ workspace_root="$(dirname "${hook_dir}")"
 repo_root="$(git rev-parse --show-toplevel)"
 
 if [[ "${repo_root}" != "${workspace_root}" ]]; then
-  exit 0
+  exec node "${workspace_root}/scripts/harness/pre-commit-validate.mjs"
 fi
 
+node "${workspace_root}/scripts/harness/pre-commit-validate.mjs"
 exec node "${workspace_root}/scripts/harness/check-sync-drift.mjs" --staged

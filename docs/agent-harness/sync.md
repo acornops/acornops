@@ -49,16 +49,19 @@ repositories and does not create commits. New hook files can be added to
 Run this setup again after moving the workspace directory, after cloning a new
 child repository, or after adding a new local clone to `workspace.yaml`.
 
-The shared `.githooks/pre-commit` hook runs only in the parent workspace repo
-and delegates to `node scripts/harness/check-sync-drift.mjs --staged`. When
-staged changes touch a shared sync surface, the checker verifies the relevant
-child repository outputs or local hook configuration. If they are stale, it
-fails with the exact sync command to run instead of modifying files during
-commit.
+The shared `.githooks/pre-commit` hook delegates to
+`node scripts/harness/pre-commit-validate.mjs` in every managed repository.
+It runs cheap deterministic checks and relies on command output for exact fix
+guidance.
 
-The hook is the normal enforcement point, so agents and developers do not need
-to memorize every sync trigger. When it blocks a commit, run the sync command it
-prints, review the resulting repository changes, then retry the commit.
+In the parent workspace repo, the same hook also delegates to
+`node scripts/harness/check-sync-drift.mjs --staged`. When staged changes touch
+a shared sync surface, the checker verifies the relevant child repository
+outputs or local hook configuration. If they are stale, it fails with the exact
+sync command to run instead of modifying files during commit.
+
+When the hook blocks a commit, run the sync command it prints, review the
+resulting repository changes, then retry the commit.
 
 To audit all sync surfaces without staging a commit, run:
 
@@ -67,11 +70,9 @@ node scripts/harness/check-sync-drift.mjs --all
 ```
 
 The shared `.githooks/pre-push` hook delegates to
-`node scripts/harness/pre-push-validate.mjs`. Before push, it runs available
-repo-local lint/style checks, repo-local harness checks, and the workspace
-platform harness that enforces shared harness shape such as `AGENTS.md` line
-limits. It intentionally does not run full unit tests or builds; those stay in
-repo validation and CI.
+`node scripts/harness/pre-push-validate.mjs`. It runs broader harness checks
+that may inspect multiple repositories or shared file trees. Full unit tests and
+builds stay in repo validation and CI.
 
 ## Shared Skill Sync
 

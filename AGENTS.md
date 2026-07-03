@@ -22,9 +22,9 @@ Durable repository-specific knowledge belongs in each child repository.
 ## Workspace Ownership
 
 - This parent repository owns cross-repository orchestration, shared skills,
-  workspace validation, shared GitHub templates, and cross-repo agent policy.
+  shared GitHub templates, and cross-repo agent policy.
 - Child repositories own product code, service architecture, service contracts,
-  repo-local validation, and repo-local skills.
+  local validation, and local skills.
 - Parent-level `security/`, `security-completed/`, and `optimizations/` folders
   are local review artifacts and are intentionally ignored by this repository.
 - Do not stage child repository directories in the parent repository.
@@ -44,8 +44,7 @@ The active child repositories are declared in [workspace.yaml](workspace.yaml):
 - `llm-gateway`
 - `management-console`
 
-When working inside a child repo, read that repo's `AGENTS.md` and follow its
-local validation and handoff rules.
+When working inside a child repo, read that repo's `AGENTS.md`.
 
 ## Cross-Repository Change Rules
 
@@ -58,18 +57,16 @@ local validation and handoff rules.
 - Use one shared branch slug across all affected child repositories. Prefer
   descriptive `feat/`, `fix/`, `docs/`, or `chore/` branch slugs, and avoid
   agent/tool-specific prefixes.
-- Use Conventional Commits for every commit subject and pull request title.
+- Use Conventional Commits for commit subjects and pull request titles.
 - Prefer a central tracking issue for work that touches multiple repositories.
 - Use `./scripts/workspace/status.mjs` before and after multi-repo work.
 - Use `./scripts/workspace/branch.mjs` to create matching branches in affected repos.
 - Use `./scripts/workspace/change-set.mjs` to record coordinated work.
-- Use `./scripts/workspace/validate.mjs` for repo-local and platform validation.
 - Use `./scripts/workspace/pr-plan.mjs` before publishing related PRs.
 - Open draft PRs per affected child repository.
 - Link related PRs in every PR body.
 - Include the intended merge order when PRs depend on each other.
-- Run each affected repo's validation command and any required platform checks.
-- Include exact command outcomes, skipped checks, docs impact, residual risks,
+- Include validation evidence, skipped checks, docs impact, residual risks,
   branch names, and PR links in the handoff.
 
 ## Shared Skills
@@ -83,16 +80,12 @@ local validation and handoff rules.
 - Agent tools may not auto-discover nested skills. When a task matches a skill
   description, open the relevant `SKILL.md` and follow it before editing.
 
-## Required Validation
+## Useful Workspace Commands
 
-- `./scripts/harness/check-agent-harness.sh`
-- `node scripts/harness/check-conventional-commits.mjs --last 1`
-- `node scripts/harness/check-platform-harness.mjs`
-- `node scripts/harness/check-platform-contracts.mjs`
 - `task setup` when validating developer onboarding changes
 - `./scripts/workspace/doctor.mjs` for local workspace readiness
 - `./scripts/workspace/status.mjs` for workspace state inspection
-- `task validate` when Task is installed
+- `task validate` for the workspace validation entrypoint
 
 ## High-Risk Areas
 

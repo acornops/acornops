@@ -5,9 +5,9 @@ It applies to any coding agent or engineer working in an AcornOps repository.
 
 ## Before Handoff
 
-Run the repository's canonical validation command before handing off work. Also
-run targeted unit, integration, contract, smoke, or platform checks when the
-change touches behavior covered by those checks.
+Use the repository's canonical validation command before handing off work. Add
+targeted unit, integration, contract, smoke, or platform checks when the change
+touches behavior covered by those checks.
 
 Tests and CI gates are part of the harness. Markdown guidance tells agents what
 matters; executable checks prove the work still satisfies the repository's
@@ -27,39 +27,9 @@ Do not claim validation passed without naming the command that passed.
 
 ## Commit Message Guidance
 
-Use Conventional Commits 1.0.0 for local commits and pull request titles:
-
-```text
-type(scope): summary
-```
-
-Recommended default types:
-
-- `feat`
-- `fix`
-- `docs`
-- `refactor`
-- `test`
-- `chore`
-- `ci`
-- `build`
-- `perf`
-- `style`
-- `revert`
-
-Examples:
-
-```text
-docs(harness): standardize agent handoff
-ci(validation): enforce conventional PR titles
-```
-
-For breaking changes, use `!` after the type or scope, or include a
-`BREAKING CHANGE:` footer.
-
-Repositories may document additional types when the team needs them. Existing
-historical commits are not rewritten, but new commits and pull request titles
-must follow this convention.
+Local commits and pull request titles use
+[Conventional Commits](conventional-commits.md). Repositories may document
+additional types when the team needs them.
 
 ## Vendor Neutrality
 

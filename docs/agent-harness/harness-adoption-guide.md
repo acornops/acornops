@@ -102,7 +102,7 @@ labels or assignees; those are repository-specific GitHub settings.
 templates against every workspace child repository, including the docs-site
 profile.
 
-## Validation strategy
+## Validation Strategy
 
 Every repository should expose one obvious validation command:
 
@@ -113,10 +113,10 @@ Every repository should expose one obvious validation command:
 That command should run the repository's local checks only. Cross-repo checks
 belong in the deployment or platform harness.
 
-Unit tests, integration tests, contract checks, smoke tests, and CI gates are
-part of the harness. Markdown files define when each validation depth is
-required; scripts, task runners, package commands, and CI enforce the rule.
-Agents must include exact validation evidence before handoff.
+Unit tests, integration tests, contract checks, smoke tests, hooks, and CI gates
+are part of the harness. Markdown files should define when deeper validation is
+needed; executable checks should enforce deterministic rules. Handoffs should
+include exact validation evidence.
 
 Documentation is also part of the harness. Changes to features, APIs,
 configuration, deployment behavior, operations, security, or reliability should
@@ -132,14 +132,14 @@ Shared standards define shape and expectations:
 - contracts must be documented
 - high-risk areas must be listed
 - shared skills must follow metadata rules
-- validation must be explicit
+- validation entrypoints must be discoverable
 - handoff evidence must name exact commands and outcomes
 - commit and pull request title guidance should be discoverable
 
 Local repositories define substance:
 
-- exact build/test/lint commands
-- exact handoff and validation commands
+- local build, test, and validation entrypoints
+- handoff requirements
 - architecture boundaries
 - service-specific contract checks
 - development and operations details
