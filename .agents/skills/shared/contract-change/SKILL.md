@@ -7,19 +7,21 @@ description: Coordinate AcornOps API and cross-repository contract changes. Use 
 
 - changed API, schema, manifest, or integration-boundary files
 - producer and consumer repositories from `workspace.yaml`
-- existing `docs/contracts/README.md` and `docs/contracts/manifest.json`
+- existing `docs/contracts/manifest.json`, OpenAPI/schema sources, and any
+  boundary notes in `docs/contracts/README.md`
 - compatibility, rollout, and validation requirements
 - target model and capability compatibility requirements when target behavior changes
 
 # Procedure
 
 1. Identify the contract producer, consumers, and the canonical source of truth.
-2. Compare implementation changes against documented payloads, routes, events, errors, and auth requirements.
-3. Update both producer and consumer contract docs/manifests in the same coordinated change when behavior crosses repo boundaries.
-4. Preserve backward compatibility unless the user explicitly accepts a breaking change and rollout plan.
-5. For target model or capability changes, confirm whether `acornops-target-boundary-design` and `acornops-target-adapter-patterns` also apply.
-6. Run affected repo contract checks and `node scripts/harness/check-platform-contracts.mjs` from the workspace root.
-7. Record merge order, compatibility notes, docs impact, and residual risk in the handoff.
+2. Compare implementation changes against manifest/OpenAPI/schema payloads, routes, events, errors, and auth requirements.
+3. Update producer and consumer manifests plus generated/reference sources in the same coordinated change when behavior crosses repo boundaries.
+4. Update `docs/contracts/README.md` only when a durable invariant, ownership boundary, auth rule, rollout rule, or non-obvious behavior changes.
+5. Preserve backward compatibility unless the user explicitly accepts a breaking change and rollout plan.
+6. For target model or capability changes, confirm whether `acornops-target-boundary-design` and `acornops-target-adapter-patterns` also apply.
+7. Run affected repo contract checks and `node scripts/harness/check-platform-contracts.mjs` from the workspace root.
+8. Record merge order, compatibility notes, docs impact, and residual risk in the handoff.
 
 # Outputs
 

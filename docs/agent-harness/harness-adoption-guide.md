@@ -114,27 +114,39 @@ That command should run the repository's local checks only. Cross-repo checks
 belong in the deployment or platform harness.
 
 Unit tests, integration tests, contract checks, smoke tests, hooks, and CI gates
-are part of the harness. Markdown files should define when deeper validation is
-needed; executable checks should enforce deterministic rules. Handoffs should
-include exact validation evidence.
+are part of the harness.
+
+Use Markdown for:
+
+- when a deeper check is required
+- what risk or contract the check covers
+- what evidence belongs in the handoff
+
+Use executable checks for deterministic rules.
 
 Documentation is also part of the harness. Changes to features, APIs,
 configuration, deployment behavior, operations, security, or reliability should
 update the nearest durable doc in the same change. If no docs change is needed,
 the handoff should include `Docs impact: none` with the reason.
 
+Contract READMEs should be boundary briefs, not generated reference manuals.
+Put endpoint, event, field, and schema coverage in `manifest.json`, OpenAPI,
+DTOs, generated clients, and executable checks. Keep README prose for durable
+invariants, ownership boundaries, auth rules, rollout constraints, and
+non-obvious cross-service behavior.
+
 ## Reconciling shared and local checks
 
 Shared standards define shape and expectations:
 
-- docs must exist
-- development and operations guides must be present
-- contracts must be documented
-- high-risk areas must be listed
-- shared skills must follow metadata rules
-- validation entrypoints must be discoverable
-- handoff evidence must name exact commands and outcomes
-- commit and pull request title guidance should be discoverable
+- required docs exist
+- development and operations guides exist
+- contracts have a documented owner and manifest
+- high-risk areas are listed in the repo entrypoint
+- shared skills follow metadata rules
+- validation entrypoints are discoverable
+- handoff evidence names exact commands and outcomes
+- commit and pull request title guidance is discoverable
 
 Local repositories define substance:
 

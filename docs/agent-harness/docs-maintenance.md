@@ -103,9 +103,14 @@ COPILOT_AGENT_MODEL
 Only use model IDs documented by GitHub for Copilot cloud agent tasks and
 available under the authenticated account's plan and organization policy.
 
-Before the agent creates a branch, commit, or pull request, it must first
-decide whether the evidence justifies a documentation or agent-guidance update.
-If no evidence-backed updates are needed, the task should end without creating a
+Before the agent creates a branch, commit, or pull request, it checks:
+
+- changed files affect docs, agent guidance, validation, setup, contracts,
+  operations, security, or reliability
+- the evidence points to a specific durable doc or harness file
+- the update can be scoped to that file instead of a broad rewrite
+
+If no evidence-backed updates are needed, the task ends without creating a
 branch, commit, or pull request.
 
 When updates are needed, keep the resulting pull request and commit history

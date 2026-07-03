@@ -7,20 +7,23 @@ repositories.
 
 - Producer: service or repository that owns the API, event, schema, or manifest.
 - Consumers: repositories that call, render, deploy, or validate that boundary.
-- Contract artifacts: `docs/contracts/README.md`, `docs/contracts/manifest.json`,
-  OpenAPI files, DTOs, generated clients, schema tests, and mapper tests.
+- Contract artifacts: `docs/contracts/manifest.json`, OpenAPI files, DTOs,
+  generated clients, schema tests, mapper tests, and the boundary brief in
+  `docs/contracts/README.md`.
 - Target contract artifacts: target model APIs, target capability payloads,
   registration schemas, health/status payloads, credential references, and
   target routing request/response shapes.
 
 ## Required Coordination
 
-1. Inspect the producer implementation and contract docs together.
+1. Inspect the producer implementation and manifest/OpenAPI/schema sources together.
 2. Inspect every declared consumer in the manifest.
-3. Update mirrored docs/manifests when both sides must agree.
-4. Add or update tests at the producer/consumer boundary.
-5. Keep breaking changes explicit with rollout and merge order.
-6. For target model or capability changes, verify the shared target boundary and
+3. Update mirrored manifests and generated/reference sources when both sides must agree.
+4. Update the contract README only for durable invariants, auth boundaries,
+   ownership rules, rollout constraints, or non-obvious behavior.
+5. Add or update tests at the producer/consumer boundary.
+6. Keep breaking changes explicit with rollout and merge order.
+7. For target model or capability changes, verify the shared target boundary and
    adapter boundary are documented by the relevant target skills.
 
 ## Validation

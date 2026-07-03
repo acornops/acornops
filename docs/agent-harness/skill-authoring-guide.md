@@ -47,7 +47,8 @@ Create a new skill when at least one is true:
 
 - the workflow repeats across tasks or repositories
 - the workflow has safety-critical checks that must be standardized
-- the workflow needs repository-specific context to avoid mistakes
+- the workflow depends on repository-specific files, commands, contracts, or
+  risk boundaries
 - the workflow is large enough that reuse materially reduces risk
 
 ## Naming Conventions
