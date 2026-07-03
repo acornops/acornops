@@ -38,8 +38,7 @@ core.hooksPath -> <workspace>/.githooks
 
 The script writes local Git config only. It does not copy hook files into child
 repositories and does not create commits. New hook files can be added to
-`.githooks/` later, such as `pre-commit`, `pre-push`, or
-`prepare-commit-msg`, without changing each repository's Git config again.
+`.githooks/` later without changing each repository's Git config again.
 
 ### What It Does Not Sync
 
@@ -66,6 +65,13 @@ To audit all sync surfaces without staging a commit, run:
 ```bash
 node scripts/harness/check-sync-drift.mjs --all
 ```
+
+The shared `.githooks/pre-push` hook delegates to
+`node scripts/harness/pre-push-validate.mjs`. Before push, it runs available
+repo-local lint/style checks, repo-local harness checks, and the workspace
+platform harness that enforces shared harness shape such as `AGENTS.md` line
+limits. It intentionally does not run full unit tests or builds; those stay in
+repo validation and CI.
 
 ## Shared Skill Sync
 

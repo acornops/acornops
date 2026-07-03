@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+hook_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+workspace_root="$(dirname "${hook_dir}")"
+
+exec node "${workspace_root}/scripts/harness/pre-push-validate.mjs"

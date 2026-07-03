@@ -180,6 +180,9 @@ The shared pre-commit hook does not auto-sync files. It runs
 commits and prints the relevant sync command when shared skills, GitHub
 templates, Claude settings, or Git hooks are stale.
 
+The shared pre-push hook runs available lint/style checks, repo-local harness
+checks, and the workspace platform harness before pushing.
+
 ## Validate
 
 ```bash
