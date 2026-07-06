@@ -1,4 +1,4 @@
-# Child product repositories managed independently.
+# Child repositories managed independently.
 /acornops-deployment/
 /control-plane/
 /docs-website/
@@ -7,6 +7,7 @@
 /agentv/
 /llm-gateway/
 /management-console/
+/charts/
 
 # Local review and planning artifacts.
 /security/

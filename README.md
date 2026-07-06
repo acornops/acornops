@@ -94,6 +94,7 @@ acornops/
   agentv/  # ignored child repo for Linux/systemd AgentV work
   llm-gateway/  # ignored child repo for model and MCP brokering
   management-console/  # ignored child repo for the browser console
+  charts/  # ignored child repo for the public Helm chart repository
 ```
 
 Child repositories are intentionally ignored by this parent repository. Do not

@@ -82,3 +82,13 @@ Test Command: `task unit-test` and `task test` (integration in container)
 Canonical Validation: `task validate`
 Deployment Model: Docker Compose service with local mock orchestrator/gateway harness
 Infrastructure Tools: Docker Compose, Task, Ruff, Pytest, GitHub Actions
+
+## Repository: charts
+Purpose: Public classic Helm chart repository mirror for AcornOps chart packages.
+Primary Language: YAML + Markdown
+Framework: Static Helm repository index
+Build Command: N/A
+Test Command: N/A
+Canonical Validation: N/A
+Deployment Model: GitHub Pages serving `index.yaml` and packaged chart archives
+Infrastructure Tools: Helm, GitHub Pages, GitHub Actions

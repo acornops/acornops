@@ -50,3 +50,8 @@ repositories:
     remote: https://github.com/acornops/management-console.git
     default_branch: main
     validate: npm run validate
+
+  - name: charts
+    path: ./charts
+    remote: https://github.com/acornops/charts.git
+    default_branch: main

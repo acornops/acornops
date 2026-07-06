@@ -165,6 +165,8 @@ Internal-only services:
 - `acornops-deployment`: full-stack deployment tracks, platform Helm chart,
   runbooks, and release matrix.
 - `docs-website`: public documentation site.
+- `charts`: public classic Helm chart repository mirror for packaged platform
+  and agent charts.
 
 ## Deployment Tracks
 

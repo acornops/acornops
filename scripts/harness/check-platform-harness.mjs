@@ -5,6 +5,7 @@ import { loadWorkspace, workspaceRoot } from '../lib/workspace.mjs';
 const root = workspaceRoot;
 
 const docsSiteRepos = new Set(['docs-website']);
+const staticInfrastructureRepos = new Set(['charts']);
 
 const standardRequiredFiles = [
   'AGENTS.md',
@@ -39,6 +40,14 @@ const docsSiteRequiredFiles = [
   'package.json',
   'scripts/check-docs.mjs',
   '.github/workflows/ci.yml',
+  '.agents/skills/README.md',
+  '.agents/skills/shared/.standards-version'
+];
+
+const staticInfrastructureRequiredFiles = [
+  'AGENTS.md',
+  'README.md',
+  'index.yaml',
   '.agents/skills/README.md',
   '.agents/skills/shared/.standards-version'
 ];
@@ -232,10 +241,33 @@ function checkDocsSiteRepo(repo) {
   expect(Boolean(docsConfig.navigation), `${repoRelative(repo, 'docs.json')} should define Mintlify navigation`);
 }
 
+function checkStaticInfrastructureRepo(repo) {
+  for (const file of staticInfrastructureRequiredFiles) {
+    expectRepoFile(repo, file);
+  }
+
+  const agents = readRepo(repo, 'AGENTS.md');
+  const readme = readRepo(repo, 'README.md');
+  const index = readRepo(repo, 'index.yaml');
+
+  expect(agents.split('\n').length <= 140, `${repoRelative(repo, 'AGENTS.md')} should remain short`);
+  expect(!agents.includes('/Users/'), `${repoRelative(repo, 'AGENTS.md')} should use portable relative links`);
+  expect(agents.includes('Agent-Assisted Development'), `${repoRelative(repo, 'AGENTS.md')} should describe agent-assisted development entrypoints`);
+  expect(agents.includes('acornops-workspace'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the workspace root`);
+  expect(agents.includes('.agents/skills/shared'), `${repoRelative(repo, 'AGENTS.md')} should describe shared skills`);
+  expect(agents.includes('.agents/skills/local'), `${repoRelative(repo, 'AGENTS.md')} should describe local skills`);
+  expect(readme.includes('helm repo add acornops'), `${repoRelative(repo, 'README.md')} should document the Helm repository install path`);
+  expect(readme.includes('acornops.github.io/charts'), `${repoRelative(repo, 'README.md')} should document the public GitHub Pages URL`);
+  expect(index.includes('apiVersion: v1'), `${repoRelative(repo, 'index.yaml')} should be a Helm repository index`);
+  expect(index.includes('entries:'), `${repoRelative(repo, 'index.yaml')} should define Helm chart entries`);
+}
+
 for (const repo of loadWorkspace()) {
   checkCommonRepoRules(repo);
   if (docsSiteRepos.has(repo.name)) {
     checkDocsSiteRepo(repo);
+  } else if (staticInfrastructureRepos.has(repo.name)) {
+    checkStaticInfrastructureRepo(repo);
   } else {
     checkStandardRepo(repo);
   }

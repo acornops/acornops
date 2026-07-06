@@ -150,6 +150,7 @@ done
 
 expect_contains ".gitignore" "/control-plane/"
 expect_contains ".gitignore" "/docs-website/"
+expect_contains ".gitignore" "/charts/"
 expect_contains ".gitignore" "/security/"
 expect_contains ".gitignore" "/change-sets/active/*.md"
 expect_contains ".gitignore" "/change-sets/completed/*.md"
@@ -179,6 +180,7 @@ expect_contains "AGENTS.md" 'The parent workspace does not use `.agents/skills/l
 expect_contains "AGENTS.md" "docs/agent-harness/agent-handoff-policy.md"
 expect_contains "workspace.yaml" "control-plane"
 expect_contains "workspace.yaml" "management-console"
+expect_contains "workspace.yaml" "charts"
 expect_contains "docs/agent-harness/agent-handoff-policy.md" "Conventional Commits"
 expect_contains "docs/agent-harness/conventional-commits.md" "scripts/harness/check-conventional-commits.mjs"
 expect_contains "docs/agent-harness/conventional-commits.md" ".githooks/commit-msg"
@@ -277,6 +279,7 @@ child_repos=(
   "agentv"
   "llm-gateway"
   "management-console"
+  "charts"
 )
 
 if command -v git >/dev/null 2>&1 && git -C "${ROOT_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
