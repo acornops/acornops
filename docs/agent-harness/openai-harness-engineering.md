@@ -13,7 +13,7 @@ AcornOps adapts that model into repo-local harness rules so agents have stable e
 
 ## AcornOps Harness Principles
 
-1. Every repo has stable entry points: `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `docs/index.md`, and a canonical validation command.
+1. Product and docs repos have stable entry points: `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `docs/index.md`, and a canonical validation command; static distribution repos should document when validation is intentionally `N/A`.
 2. Development and operations knowledge is explicit: `docs/DEVELOPMENT.md` and `docs/OPERATIONS.md`.
 3. Whole-system context has one owner: `docs/system-architecture.md` in the
    workspace root.
