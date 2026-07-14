@@ -134,6 +134,50 @@ and operator runbooks.
 4. Gateway stream events return to the execution engine and then back to the
    control plane as run events.
 
+### Tool Result Evidence And Artifacts
+
+Tool results deliberately have separate reasoning and operator views. AgentK
+redacts at the source and returns a bounded typed model projection alongside a
+complete redacted result. The control plane relays that MCP envelope unchanged,
+and the LLM gateway validates its advertised output schema, transmitted context
+size, independently computed result ceilings, and registry-owned retention
+policy. Invalid AgentK envelopes fail closed.
+The Agent WebSocket and trusted control-plane-to-gateway MCP hop each use a
+3 MiB transport ceiling, leaving bounded envelope headroom around the separate
+2 MiB complete-result limit.
+The gateway-to-execution-engine normalized response has its own 5 MiB ceiling
+because generic MCP content can occupy both contract views before structural
+fallback runs.
+
+The execution engine independently revalidates producer projections and sends
+only compact evidence through its 48 KiB active ledger. Eligible complete
+results are uploaded to the control plane, redacted again, capped at 2 MiB,
+gzip-compressed, and retained for seven days. A strict control-plane event
+allowlist and independent 12 KiB check keep run events and SSE limited to
+compact evidence plus artifact metadata;
+the management console downloads a full redacted artifact lazily through
+workspace data-read authorization. Unknown non-AgentK results use deterministic
+structural compaction and are not retained unless the server is explicitly
+trusted by a future registry policy.
+Tool fields, logs, and resource content remain untrusted data throughout model
+reasoning; embedded text cannot override user intent, approvals, or safety
+rules.
+
+Write failures after dispatch are treated as uncertain at every boundary.
+AgentK, the gateway, and the execution engine preserve `outcome: unknown`, stop
+the run, and require target inspection before retry. Approval recovery reuses a
+completed stored receipt and never redispatches the same completed approval.
+Successful write projections include an exact-target `get_resource`
+verification instruction before remediation is reported complete.
+
+The result contract is a coordinated clean cutover and is not safe for a live
+mixed-version rolling deployment. Database migrations are additive and run
+first, but run dispatch must then be drained while all dependent services are
+replaced, AgentK reconnects, and built-in tools resynchronize. Read-only
+contract checks run before writes reopen; the guarded Pod remediation smoke
+runs afterward. Contract failure requires full-matrix rollback while dispatch
+remains closed.
+
 ## Public And Internal Boundaries
 
 Production public route hostnames:
