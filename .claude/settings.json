@@ -7,8 +7,7 @@
   "permissions": {
     "allow": [
       "Bash(npx vitest *)",
-      "Bash(npx tsc *)",
-      "Bash(node /home/ning/.claude/skills/impeccable/scripts/load-context.mjs)"
+      "Bash(npx tsc *)"
     ]
   }
 }
