@@ -1,6 +1,7 @@
-# AcornOps Workspace Agent Entry Point
+# AcornOps Repository Agent Entry Point
 
-Use this file as the map for cross-repository work in the AcornOps workspace.
+Use this file as the map for cross-repository work from the canonical AcornOps
+repository and its local workspace.
 Durable repository-specific knowledge belongs in each child repository.
 
 ## Start Here

@@ -138,7 +138,7 @@ if [[ "${DRY_RUN}" == true ]]; then
   echo "Dry run: no Git config will be written"
 fi
 
-configure_hooks_path "acornops-workspace" "${WORKSPACE_ROOT}"
+configure_hooks_path "acornops" "${WORKSPACE_ROOT}"
 
 for i in "${!REPO_NAMES[@]}"; do
   repo_name="${REPO_NAMES[$i]}"

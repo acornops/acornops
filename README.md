@@ -2,23 +2,78 @@
   <img width="220" src="https://raw.githubusercontent.com/acornops/docs-website/main/logo/light.svg" alt="AcornOps" />
 </p>
 
-<h1 align="center">AcornOps Workspace</h1>
+<h1 align="center">AcornOps</h1>
 
 <p align="center">
-  <a href="https://github.com/acornops/acornops-workspace/actions/workflows/ci.yml"><img src="https://github.com/acornops/acornops-workspace/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/workspace-harness-blue.svg" alt="Workspace harness" />
+  <a href="https://github.com/acornops/acornops/actions/workflows/ci.yml"><img src="https://github.com/acornops/acornops/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/contracts-checked-blue.svg" alt="Contracts checked" />
   <img src="https://img.shields.io/badge/commits-conventional-green.svg" alt="Conventional commits" />
 </p>
 
 <p align="center">
-  Versioned workspace harness for AcornOps multi-repository development.
+  Open-source, self-hosted AI-assisted operations for Kubernetes clusters and Linux/systemd VMs.
 </p>
 
-This repository is the developer entry point for working across AcornOps
-repositories. It owns the workspace manifest, setup helpers, shared skills,
-shared GitHub templates, and cross-repository documentation. It does not own
-product source code. Product repositories are checked out as ignored child
+<p align="center">
+  <a href="https://console.demo.acornops.dev/"><strong>Try the live demo</strong></a>
+  ·
+  <a href="https://docs.acornops.dev/quickstart">Self-host AcornOps</a>
+  ·
+  <a href="https://docs.acornops.dev/">Read the docs</a>
+  ·
+  <a href="https://docs.acornops.dev/integrations">Build an integration</a>
+</p>
+
+> [!IMPORTANT]
+> AcornOps is under active experimental development. APIs, deployment
+> contracts, and upgrade paths may change before a stable release.
+
+AcornOps connects a central operations platform to Kubernetes clusters and
+Linux/systemd VMs through outbound target agents. Operators can inspect live
+target context, run guided investigations, coordinate controlled remediation,
+and automate repeatable operational work from one management console.
+
+The platform keeps operators in control:
+
+- AgentK and AgentV initiate outbound connections to the control plane.
+- Linux/systemd built-in tools are read-only.
+- Kubernetes writes require explicit RBAC, agent enablement, run permission,
+  and tool access.
+- Write confirmation is required by default and pauses a run before the
+  specific write-capable tool call.
+- The LLM gateway enforces run-scoped model and tool access, runtime limits,
+  and budgets.
+- Remote MCP servers are target-scoped and discovery-first; discovered tools
+  stay disabled until reviewed and enabled.
+
+Start with the [public demo](https://console.demo.acornops.dev/), follow the
+[quickstart](https://docs.acornops.dev/quickstart), or review the
+[system architecture](docs/system-architecture.md).
+
+## Repository Map
+
+AcornOps is split into independently versioned components with explicit
+contracts between them.
+
+| Repository | Responsibility |
+| --- | --- |
+| [`management-console`](https://github.com/acornops/management-console) | Browser experience for workspaces, targets, runs, Agents, Workflows, approvals, and tools |
+| [`control-plane`](https://github.com/acornops/control-plane) | Authentication, workspace APIs, target registration, run state, webhooks, and agent coordination |
+| [`execution-engine`](https://github.com/acornops/execution-engine) | Durable run execution, streaming events, retries, cancellation, and tool coordination |
+| [`llm-gateway`](https://github.com/acornops/llm-gateway) | Model-provider routing, MCP brokering, secrets, and policy enforcement |
+| [`agentk`](https://github.com/acornops/agentk) | Outbound Kubernetes discovery, snapshots, logs, and controlled tool execution |
+| [`agentv`](https://github.com/acornops/agentv) | Outbound Linux/systemd snapshots, logs, and read-only built-in tools |
+| [`acornops-deployment`](https://github.com/acornops/acornops-deployment) | Docker Compose and Kubernetes deployment tracks, compatibility metadata, and runbooks |
+| [`charts`](https://github.com/acornops/charts) | Public Helm repository mirror for packaged platform and agent charts |
+| [`docs-website`](https://github.com/acornops/docs-website) | Public operator, deployment, integration, architecture, and API documentation |
+
+## Develop AcornOps
+
+This repository is also the developer entry point for working across the
+independently versioned AcornOps repositories. It owns the workspace manifest,
+setup helpers, shared skills, shared GitHub templates, and cross-repository
+documentation. Product repositories are checked out as ignored child
 directories and remain independently versioned.
 
 ## Workspace Model
@@ -105,7 +160,7 @@ stage or commit product repository contents from the workspace repo.
 Clone the workspace:
 
 ```bash
-git clone https://github.com/acornops/acornops-workspace.git acornops
+git clone https://github.com/acornops/acornops.git
 cd acornops
 ```
 
