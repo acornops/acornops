@@ -1,6 +1,6 @@
 workspace:
   name: acornops
-  description: Versioned AcornOps multi-repository workspace harness.
+  description: Canonical multi-repository development workspace for AcornOps.
 
 repositories:
   - name: acornops-deployment

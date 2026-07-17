@@ -7,7 +7,7 @@ to repo-local commands without turning product repositories into submodules.
 ## First-Time Setup
 
 ```bash
-git clone https://github.com/acornops/acornops-workspace.git acornops
+git clone https://github.com/acornops/acornops.git
 cd acornops
 task setup
 ```
