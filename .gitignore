@@ -5,8 +5,11 @@
 /execution-engine/
 /agentk/
 /agentv/
+/k8s-agent/
+/vm-agent/
 /llm-gateway/
 /management-console/
+/platform-admin-console/
 /charts/
 
 # Local review and planning artifacts.

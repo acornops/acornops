@@ -23,10 +23,11 @@ function stable(value) {
 const manifests = {
   'control-plane': readJson('control-plane/docs/contracts/manifest.json'),
   'management-console': readJson('management-console/docs/contracts/manifest.json'),
+  'platform-admin-console': readJson('platform-admin-console/docs/contracts/manifest.json'),
   'execution-engine': readJson('execution-engine/docs/contracts/manifest.json'),
   'llm-gateway': readJson('llm-gateway/docs/contracts/manifest.json'),
-  'agentk': readJson('agentk/docs/contracts/manifest.json'),
-  'agentv': readJson('agentv/docs/contracts/manifest.json')
+  'agentk': readJson('k8s-agent/docs/contracts/manifest.json'),
+  'agentv': readJson('vm-agent/docs/contracts/manifest.json')
 };
 
 const failures = [];
@@ -57,6 +58,7 @@ for (const [repoName, manifest] of Object.entries(manifests)) {
 }
 
 expectCounterpart('control-plane', 'management-console', 'management-console', 'control-plane');
+expectCounterpart('control-plane', 'platform-admin-console', 'platform-admin-console', 'control-plane');
 expectCounterpart('control-plane', 'execution-engine', 'execution-engine', 'control-plane');
 expectCounterpart('control-plane', 'llm-gateway', 'llm-gateway', 'control-plane');
 expectCounterpart('control-plane', 'agentk', 'agentk', 'control-plane');
