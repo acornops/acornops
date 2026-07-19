@@ -87,6 +87,7 @@ When working inside a child repo, read that repo's `AGENTS.md`.
 - `task setup` when validating developer onboarding changes
 - `./scripts/workspace/doctor.mjs` for local workspace readiness
 - `./scripts/workspace/status.mjs` for workspace state inspection
+- `task runtime-truth:check` to reject runtime fixture identities, fallback definitions, and Workflow V1 branches
 - `task validate` for the workspace validation entrypoint
 
 ## High-Risk Areas

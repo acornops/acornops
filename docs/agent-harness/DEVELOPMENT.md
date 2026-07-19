@@ -29,6 +29,7 @@ Validate workspace standards:
 
 ```bash
 ./scripts/harness/check-agent-harness.sh
+node scripts/harness/check-runtime-truth.mjs
 ```
 
 Or with Task:
@@ -83,6 +84,14 @@ Apply shared GitHub template sync:
 - Update `.agents/skills/README.md` when changing shared skill layout guidance.
 - Update `scripts/harness/check-agent-harness.sh` when adding required
   workspace files or policy text.
+- Update `scripts/harness/check-runtime-truth.mjs` when production runtime
+  identities, catalog authority rules, or default deployment fixture policy
+  changes. Browser-only management-console fixtures may live under
+  `management-console/src/fixtures` when guarded by the enforced `mock` data
+  mode and a fail-closed transport. Local full-stack startup may seed the
+  deterministic Kubernetes and VM targets with local-only Agent keys. The
+  `cluster-fixture` profile remains available when only AgentK should connect.
+  Production deployment files must keep all development seeding disabled.
 - Update `docs/agent-harness/harness-adoption-guide.md` when the product-repo adoption model changes.
 - Keep shared issue templates free of default labels or assignees unless the
   corresponding repository settings are managed across all child repositories.
