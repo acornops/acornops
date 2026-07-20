@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "bindings": [
+    {
+      "bindingId": "prb_conformance_1",
+      "type": "artifact",
+      "resourceId": "artifact-1",
+      "provider": "test.artifact",
+      "providerVersion": "1",
+      "workspaceId": "workspace-1",
+      "labelSnapshot": "Café report",
+      "source": "explicit",
+      "operations": ["read"],
+      "contextMode": "tool",
+      "providerData": {
+        "score": 1.5,
+        "coordinates": [1, 2],
+        "enabled": true
+      }
+    }
+  ],
+  "sha256": "ebca583f4ae4d9ae4b00620b87f302103e997db0b416155538d0a83da40ed149"
+}

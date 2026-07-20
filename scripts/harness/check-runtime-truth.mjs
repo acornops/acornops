@@ -167,18 +167,6 @@ if (!localUp.includes('export SEED_DEVELOPMENT_DATA=true')
   failures.push('acornops-deployment: local-up must seed both targets and retain the AgentK-only profile');
 }
 
-const legacyCleanupMigration = 'control-plane/migrations/control-plane/013_workflow_agent_v2.sql';
-const releasedMigrationManifest =
-  'control-plane/migrations/control-plane/released-checksums.json';
-const releasedMigrations = new Set();
-if (existsSync(path.join(root, releasedMigrationManifest))) {
-  const manifest = JSON.parse(
-    readFileSync(path.join(root, releasedMigrationManifest), 'utf8')
-  );
-  for (const file of Object.keys(manifest.migrations ?? {})) {
-    releasedMigrations.add(`control-plane/migrations/control-plane/${file}`);
-  }
-}
 const migrationRules = [
   {
     pattern: /\b(?:agent-workflow-orchestrator|agent-cluster-triage|agent-release-coordinator|agent-incident-reporter|cluster-triage|repository-operation|incident-report-pdf)\b/,
@@ -202,10 +190,6 @@ const migrationRules = [
   }
 ];
 for (const file of filesUnder('control-plane/migrations/control-plane')) {
-  // Released migrations are immutable historical inputs. Their exact bytes are
-  // enforced by the control-plane checksum manifest; runtime-truth rules apply
-  // to newly appended migrations until they are reviewed and frozen.
-  if (file === legacyCleanupMigration || releasedMigrations.has(file)) continue;
   checkFile(file, migrationRules);
 }
 
