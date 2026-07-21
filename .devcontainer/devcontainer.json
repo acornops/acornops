@@ -1,0 +1,37 @@
+{
+    "name":"AcornOps Workspace",
+    "image":"mcr.microsoft.com/devcontainers/universal:2",
+    "hostRequirements":{
+        "cpus":4,
+        "memory":"16gb",
+        "storage":"64gb"
+    },
+    "features":{
+        "ghcr.io/devcontainers/features/docker-in-docker:2":{
+            
+        },
+        "ghcr.io/devcontainers-extra/features/task:1":{
+            
+        }
+    },
+    "customizations":{
+        "codespaces":{
+            "repositories":{
+                "acornops/*":{
+                    "permissions":{
+                        "contents":"write",
+                        "pull_requests":"write"
+                    }
+                }
+            }
+        },
+        "vscode":{
+            "extensions":[
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-yaml",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "postCreateCommand":"task setup"
+}
