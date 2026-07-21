@@ -193,6 +193,7 @@ If Task is not installed yet, use the underlying scripts directly:
 ```bash
 ./scripts/workspace/bootstrap.mjs
 ./scripts/workspace/doctor.mjs
+./scripts/sync/githooks.sh
 ```
 
 Dependency installation and service startup stay repo-local because each product
