@@ -35,7 +35,7 @@ Each product repository should commit its own:
 - `docs/contracts/manifest.json`
 - `scripts/check-harness.*`
 - `scripts/check-contracts.*`
-- one canonical validation command
+- one canonical validation command when the repository has local validation to run
 
 The repository-local files are authoritative for that repository. Shared
 workspace docs define the expected shape, but each repository owns its concrete
@@ -46,6 +46,11 @@ service profile. It should still commit `AGENTS.md`, shared skills, GitHub
 templates, and one canonical validation command, but it does not need the full
 repo-local `docs/` knowledge-base tree because its root MDX files are the
 published documentation surface.
+
+Static distribution repositories such as `charts` are a separate profile. They
+should still commit `AGENTS.md`, shared skills, GitHub templates, and durable
+usage docs, but they may not have a local validation command; when validation is
+not applicable, document that explicitly in the workspace summary.
 
 For whole-system topology, use one canonical owner instead of duplicating large
 diagrams in every repo. In AcornOps, that owner is
@@ -104,14 +109,15 @@ profile.
 
 ## Validation Strategy
 
-Every repository should expose one obvious validation command:
+Every product or docs repository should expose one obvious validation command:
 
 - JavaScript/TypeScript: usually `npm run validate`
 - Python service: usually `task validate`
 - Deployment/integration: usually `task validate`
 
 That command should run the repository's local checks only. Cross-repo checks
-belong in the deployment or platform harness.
+belong in the deployment or platform harness. Static distribution repositories
+without local executable checks should document why validation is `N/A`.
 
 Unit tests, integration tests, contract checks, smoke tests, hooks, and CI gates
 are part of the harness.

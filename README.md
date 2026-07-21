@@ -180,7 +180,7 @@ Understand the platform:
 - [System Architecture](docs/system-architecture.md) explains how the AcornOps
   components, runtime flows, and repository ownership fit together.
 - [`workspace.yaml`](workspace.yaml) lists every child repository, local path,
-  remote, default branch, and validation command.
+  remote, default branch, and any configured validation command.
 
 Preview clone actions before running setup:
 
@@ -197,7 +197,7 @@ If Task is not installed yet, use the underlying scripts directly:
 
 Dependency installation and service startup stay repo-local because each product
 repo owns its own runtime. After bootstrap, read the affected child repo's
-README and validation command in `workspace.yaml`.
+README and, when present, its validation command in `workspace.yaml`.
 
 More detail: [Developer Getting Started](docs/developer-getting-started.md).
 

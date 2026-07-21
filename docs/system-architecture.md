@@ -8,8 +8,8 @@ repository's `ARCHITECTURE.md`; deployment mechanics live in
 ## Developer Reading Path
 
 1. Read this file to understand how the platform fits together.
-2. Use `workspace.yaml` to find the local path and validation command for each
-   repository.
+2. Use `workspace.yaml` to find the local path and any configured validation
+   command for each repository.
 3. Read the affected component repository's `README.md`, `AGENTS.md`, and
    `ARCHITECTURE.md` before changing implementation code.
 4. Read `acornops-deployment/docs/deployment-architecture.md` when the question
