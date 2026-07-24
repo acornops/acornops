@@ -44,6 +44,7 @@ The active child repositories are declared in [workspace.yaml](workspace.yaml):
 - `agentv`
 - `llm-gateway`
 - `management-console`
+- `platform-admin-console`
 - `charts`
 
 When working inside a child repo, read that repo's `AGENTS.md`.
