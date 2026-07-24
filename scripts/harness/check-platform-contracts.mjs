@@ -30,6 +30,7 @@ const manifests = {
 };
 
 const failures = [];
+const workflowTemplateContract = readJson('contracts/workflow-template-conformance.json');
 
 function expect(condition, message) {
   if (!condition) {
@@ -62,6 +63,14 @@ expectCounterpart('control-plane', 'llm-gateway', 'llm-gateway', 'control-plane'
 expectCounterpart('control-plane', 'agentk', 'agentk', 'control-plane');
 expectCounterpart('control-plane', 'agentv', 'agentv', 'control-plane');
 expectCounterpart('execution-engine', 'llm-gateway', 'llm-gateway', 'execution-engine');
+expect(
+  stable(readJson('control-plane/test/fixtures/workflow-template-conformance.json')) === stable(workflowTemplateContract),
+  'Control-plane workflow template conformance fixture differs from the workspace contract'
+);
+expect(
+  stable(readJson('management-console/src/pages/workflows/workflow-template-conformance.json')) === stable(workflowTemplateContract),
+  'Management-console workflow template conformance fixture differs from the workspace contract'
+);
 
 if (failures.length > 0) {
   console.error('Cross-repo contract checks failed:\n');

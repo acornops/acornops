@@ -6,25 +6,16 @@
       "name": "mixed references preserve prompt order",
       "prompt": "Investigate @target[Payments VM] with @chat[Checkout incident] and @target[Database VM].",
       "tokens": [
-        { "type": "target", "label": "Payments VM", "state": "concrete" },
-        { "type": "chat", "label": "Checkout incident", "state": "concrete" },
-        { "type": "target", "label": "Database VM", "state": "concrete" }
-      ]
-    },
-    {
-      "name": "authoring placeholders",
-      "prompt": "Compare @target[] with @chat[] and @repository[].",
-      "tokens": [
-        { "type": "target", "label": "", "state": "placeholder" },
-        { "type": "chat", "label": "", "state": "placeholder" },
-        { "type": "repository", "label": "", "state": "placeholder" }
+        { "type": "target", "label": "Payments VM" },
+        { "type": "chat", "label": "Checkout incident" },
+        { "type": "target", "label": "Database VM" }
       ]
     },
     {
       "name": "escaped bracket and slash",
       "prompt": "Read @artifact[quarterly \\\\ evidence\\] final].",
       "tokens": [
-        { "type": "artifact", "label": "quarterly \\ evidence] final", "state": "concrete" }
+        { "type": "artifact", "label": "quarterly \\ evidence] final" }
       ]
     },
     {
@@ -32,7 +23,7 @@
       "prompt": "Read @finding[Café outage].",
       "normalizedPrompt": "Read @finding[Café outage].",
       "tokens": [
-        { "type": "finding", "label": "Café outage", "state": "concrete" }
+        { "type": "finding", "label": "Café outage" }
       ]
     },
     {
@@ -42,6 +33,11 @@
     }
   ],
   "invalid": [
+    {
+      "name": "empty resource reference",
+      "prompt": "Read @target[].",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    },
     {
       "name": "unterminated label",
       "prompt": "Read @chat[Incident",

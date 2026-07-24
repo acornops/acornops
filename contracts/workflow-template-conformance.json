@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "valid": [
+    {
+      "name": "all parameter types preserve first occurrence order",
+      "prompt": "Investigate {{target:cluster}} using {{text:focus}} and {{chat:incident_context}}.",
+      "parameters": [
+        { "key": "cluster", "type": "target", "required": true },
+        { "key": "focus", "type": "text", "required": true },
+        { "key": "incident_context", "type": "chat", "required": true }
+      ]
+    },
+    {
+      "name": "repeated key produces one parameter",
+      "prompt": "Compare {{target:cluster}} with the history for {{target:cluster}}.",
+      "parameters": [
+        { "key": "cluster", "type": "target", "required": true }
+      ]
+    },
+    {
+      "name": "escaped opening braces are literal",
+      "prompt": "Render \\{{text:not_a_parameter}} and ask {{text:question}}.",
+      "parameters": [
+        { "key": "question", "type": "text", "required": true }
+      ]
+    },
+    {
+      "name": "64 character key is accepted",
+      "prompt": "{{text:a123456789012345678901234567890123456789012345678901234567890123}}",
+      "parameters": [
+        {
+          "key": "a123456789012345678901234567890123456789012345678901234567890123",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "invalid": [
+    {
+      "name": "conflicting types",
+      "prompt": "{{target:resource}} {{chat:resource}}",
+      "errorCode": "WORKFLOW_TEMPLATE_PARAMETER_CONFLICT"
+    },
+    {
+      "name": "unknown type",
+      "prompt": "{{repository:repo}}",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_INVALID"
+    },
+    {
+      "name": "missing key",
+      "prompt": "{{text:}}",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_INVALID"
+    },
+    {
+      "name": "invalid key",
+      "prompt": "{{text:Incident-Context}}",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_INVALID"
+    },
+    {
+      "name": "65 character key is rejected",
+      "prompt": "{{text:a1234567890123456789012345678901234567890123456789012345678901234}}",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_INVALID"
+    },
+    {
+      "name": "whitespace",
+      "prompt": "{{target: cluster}}",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_INVALID"
+    },
+    {
+      "name": "unclosed expression",
+      "prompt": "Investigate {{target:cluster",
+      "errorCode": "WORKFLOW_TEMPLATE_EXPRESSION_UNCLOSED"
+    },
+    {
+      "name": "empty concrete reference",
+      "prompt": "Investigate @target[].",
+      "errorCode": "WORKFLOW_TEMPLATE_REFERENCE_INVALID"
+    }
+  ]
+}
