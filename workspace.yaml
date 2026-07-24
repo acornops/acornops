@@ -28,14 +28,14 @@ repositories:
     validate: task validate
 
   - name: agentk
-    path: ./agentk
-    remote: https://github.com/acornops/agentk.git
+    path: ./k8s-agent
+    remote: https://github.com/acornops/k8s-agent.git
     default_branch: main
     validate: npm run validate
 
   - name: agentv
-    path: ./agentv
-    remote: https://github.com/acornops/agentv.git
+    path: ./vm-agent
+    remote: https://github.com/acornops/vm-agent.git
     default_branch: main
     validate: npm run validate
 
@@ -48,6 +48,12 @@ repositories:
   - name: management-console
     path: ./management-console
     remote: https://github.com/acornops/management-console.git
+    default_branch: main
+    validate: npm run validate
+
+  - name: platform-admin-console
+    path: ./platform-admin-console
+    remote: https://github.com/acornops/platform-admin-console.git
     default_branch: main
     validate: npm run validate
 

@@ -21,7 +21,9 @@ repository's `ARCHITECTURE.md`; deployment mechanics live in
 ```mermaid
 flowchart LR
     User[Operator Browser]
+    PlatformAdmin[Platform Administrator Browser]
     Console[Management Console]
+    AdminConsole[Platform Admin Console + BFF]
     CP[Control Plane]
     CPDB[(Control Plane Postgres)]
     CPRedis[(Control Plane Redis)]
@@ -39,6 +41,9 @@ flowchart LR
 
     User --> Console
     Console -->|/api/v1| CP
+    PlatformAdmin -->|admin.acornops.dev| AdminConsole
+    PlatformAdmin -->|OIDC login + opaque admin session| CP
+    AdminConsole -->|governance-only /admin/v1 allowlist| CP
     User --> OIDC
     OIDC --> CP
 
@@ -68,6 +73,15 @@ The management console is the operator-facing browser application. It talks to
 the control plane through `/api/v1` and depends on the control plane for
 authentication state, workspace and target APIs, run orchestration, and
 agent-backed operations.
+
+The platform admin console is a separate governance application and
+server-side BFF. It talks only to an explicit allowlist of `/admin/v1`
+control-plane endpoints for workspace identity, existing workspace access,
+plans, lifecycle state, and platform administration audit. It does not expose workspace
+logs, targets, runs, tools, workspace audit, impersonation, or workload-control
+operations. Its browser never receives the control-plane admin bearer token;
+production authorization requires both that BFF credential and a dedicated
+OIDC-authenticated human session with one of three fixed platform roles.
 
 For standalone frontend development only, the same API client boundary can be
 intercepted by an in-browser fixture transport. Deployable builds and the full
@@ -189,6 +203,7 @@ remains closed.
 Production public route hostnames:
 
 - `console.acornops.dev/` serves the management console.
+- `admin.acornops.dev/` serves the platform admin console.
 - `api.acornops.dev/api` serves the control plane API and agent WebSocket route.
 - `console.acornops.dev/api` remains available for same-origin browser session flows.
 - `docs.acornops.dev/` serves the public documentation site.
@@ -204,6 +219,8 @@ Internal-only services:
 ## Repository Ownership
 
 - `management-console`: browser UI and nginx production image.
+- `platform-admin-console`: platform-governance UI and admin API BFF with a
+  deny-by-default `/admin/v1` endpoint allowlist.
 - `control-plane`: auth, workspaces, sessions, run state, agent
   bridge, and orchestration API.
 - `execution-engine`: run worker and durable execution callbacks.

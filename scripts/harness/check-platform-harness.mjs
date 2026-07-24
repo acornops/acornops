@@ -203,13 +203,42 @@ function checkStandardRepo(repo) {
   expect(agents.includes('.agents/skills/local'), `${repoRelative(repo, 'AGENTS.md')} should describe local skills`);
   expect(agents.includes('docs/AGENT_HANDOFF.md'), `${repoRelative(repo, 'AGENTS.md')} should link agent handoff policy`);
   expect(readme.includes('Agent-Assisted Development'), `${repoRelative(repo, 'README.md')} should describe agent-assisted development entrypoints`);
-  expect(docsIndex.includes('docs/AGENT_HANDOFF.md'), `${repoRelative(repo, 'docs/index.md')} should link agent handoff policy`);
+  expect(docsIndex.includes('AGENT_HANDOFF.md'), `${repoRelative(repo, 'docs/index.md')} should link agent handoff policy`);
   expect(handoff.includes('Use Conventional Commits 1.0.0'), `${repoRelative(repo, 'docs/AGENT_HANDOFF.md')} should require commit policy`);
   expect(handoff.includes('exact commands run'), `${repoRelative(repo, 'docs/AGENT_HANDOFF.md')} should include handoff evidence`);
   expect(handoff.includes('Vendor Neutrality'), `${repoRelative(repo, 'docs/AGENT_HANDOFF.md')} should include vendor-neutrality policy`);
-  expect(docsIndex.includes('docs/QUALITY_SCORE.md'), `${repoRelative(repo, 'docs/index.md')} should link quality score`);
-  expect(docsIndex.includes('docs/RELIABILITY.md'), `${repoRelative(repo, 'docs/index.md')} should link reliability doc`);
-  expect(docsIndex.includes('docs/SECURITY.md'), `${repoRelative(repo, 'docs/index.md')} should link security doc`);
+  expect(docsIndex.includes('QUALITY_SCORE.md'), `${repoRelative(repo, 'docs/index.md')} should link quality score`);
+  expect(docsIndex.includes('RELIABILITY.md'), `${repoRelative(repo, 'docs/index.md')} should link reliability doc`);
+  expect(docsIndex.includes('SECURITY.md'), `${repoRelative(repo, 'docs/index.md')} should link security doc`);
+}
+
+function checkPlatformAdminRequirements(repo) {
+  for (const file of [
+    'docs/product-specs/current-requirements.md',
+    'docs/product-specs/requirements-baseline.json',
+    'scripts/check-requirements.mjs',
+    '.agents/skills/local/platform-admin-change/SKILL.md'
+  ]) {
+    expectRepoFile(repo, file);
+  }
+
+  const requirements = readRepo(repo, 'docs/product-specs/current-requirements.md');
+  const baseline = JSON.parse(readRepo(repo, 'docs/product-specs/requirements-baseline.json'));
+  const packageJson = JSON.parse(readRepo(repo, 'package.json'));
+  const skill = readRepo(repo, '.agents/skills/local/platform-admin-change/SKILL.md');
+  for (const marker of ['## Authority And Change Protocol', 'historical evidence, not current requirements', '## Superseded And Excluded Behavior', '## Contract-Blocked Capabilities']) {
+    expect(requirements.includes(marker), `${repoRelative(repo, 'docs/product-specs/current-requirements.md')} is missing ${marker}`);
+  }
+  expect(baseline.authority === 'docs/product-specs/current-requirements.md', `${repo.name} executable requirements authority must be repo-local`);
+  expect(baseline.expectedRuntime?.adminRouteCount === 15, `${repo.name} requirements must lock the current 15-route subset`);
+  expect(baseline.expectedRuntime?.allowedScopeCount === 7, `${repo.name} requirements must lock the current 7-scope subset`);
+  expect(baseline.required?.length >= 10 && baseline.excluded?.length >= 10 && baseline.blocked?.length >= 4, `${repo.name} requirements coverage is incomplete`);
+  expect(packageJson.scripts?.['requirements:check'] === 'node scripts/check-requirements.mjs', `${repo.name} must expose requirements:check`);
+  expect(packageJson.scripts?.validate?.includes('npm run requirements:check'), `${repo.name} validate must run requirements:check`);
+  expect(packageJson.scripts?.['validate:ci']?.includes('npm run requirements:check'), `${repo.name} validate:ci must run requirements:check`);
+  for (const marker of ['name: platform-admin-change', 'Classify the request', 'EXC-*', 'BLOCK-*', 'npm run requirements:check']) {
+    expect(skill.includes(marker), `${repo.name} local change skill is missing ${marker}`);
+  }
 }
 
 function checkDocsSiteRepo(repo) {
@@ -270,6 +299,7 @@ for (const repo of loadWorkspace()) {
     checkStaticInfrastructureRepo(repo);
   } else {
     checkStandardRepo(repo);
+    if (repo.name === 'platform-admin-console') checkPlatformAdminRequirements(repo);
   }
 }
 

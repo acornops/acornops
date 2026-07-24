@@ -53,6 +53,16 @@ Canonical Validation: `npm run validate`
 Deployment Model: Docker multi-stage build with Nginx runtime, local Vite dev mode via compose override
 Infrastructure Tools: Docker Compose, Nginx, Vite
 
+## Repository: platform-admin-console
+Purpose: Governance-only platform administration UI and BFF for workspace identity, existing workspace access, plan assignment, lifecycle state, and platform-admin audit without tenant operational-data access.
+Primary Language: JavaScript
+Framework: Node.js built-in HTTP server + browser-native HTML/CSS/JavaScript
+Build Command: `npm run build`
+Test Command: `npm test`
+Canonical Validation: `npm run validate`
+Deployment Model: Dedicated `admin.acornops.dev` service with a server-held control-plane admin credential and same-origin browser API
+Infrastructure Tools: Node.js, control-plane `/admin/v1`, CSP, endpoint allowlisting
+
 ## Repository: agentk
 Purpose: Cluster-resident outbound-only Kubernetes agent for telemetry snapshots, live target-capability advertisement, and JSON-RPC tool execution.
 Primary Language: TypeScript
