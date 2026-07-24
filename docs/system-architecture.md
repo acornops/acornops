@@ -83,6 +83,12 @@ operations. Its browser never receives the control-plane admin bearer token;
 production authorization requires both that BFF credential and a dedicated
 OIDC-authenticated human session with one of three fixed platform roles.
 
+For standalone frontend development only, the same API client boundary can be
+intercepted by an in-browser fixture transport. Deployable builds and the full
+stack always use the real control plane. Local full-stack startup seeds
+deterministic Kubernetes and VM targets and connects their local agents;
+production startup keeps all development seeding disabled.
+
 The control plane is the public application boundary. It owns authenticated
 HTTP APIs, session handling, workspace state, target registration, run state,
 agent WebSocket ownership, and cross-service orchestration. It persists durable

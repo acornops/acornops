@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "limits": { "promptCharacters": 32768, "references": 64 },
+  "valid": [
+    {
+      "name": "mixed references preserve prompt order",
+      "prompt": "Investigate @target[Payments VM] with @chat[Checkout incident] and @target[Database VM].",
+      "tokens": [
+        { "type": "target", "label": "Payments VM" },
+        { "type": "chat", "label": "Checkout incident" },
+        { "type": "target", "label": "Database VM" }
+      ]
+    },
+    {
+      "name": "escaped bracket and slash",
+      "prompt": "Read @artifact[quarterly \\\\ evidence\\] final].",
+      "tokens": [
+        { "type": "artifact", "label": "quarterly \\ evidence] final" }
+      ]
+    },
+    {
+      "name": "unicode labels normalize to NFC",
+      "prompt": "Read @finding[Café outage].",
+      "normalizedPrompt": "Read @finding[Café outage].",
+      "tokens": [
+        { "type": "finding", "label": "Café outage" }
+      ]
+    },
+    {
+      "name": "unrelated at signs are prose",
+      "prompt": "Email ops@example.com and mention @Upper[ignored].",
+      "tokens": []
+    }
+  ],
+  "invalid": [
+    {
+      "name": "empty resource reference",
+      "prompt": "Read @target[].",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    },
+    {
+      "name": "unterminated label",
+      "prompt": "Read @chat[Incident",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    },
+    {
+      "name": "unknown escape",
+      "prompt": "Read @chat[Incident\\q].",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    },
+    {
+      "name": "control character in label",
+      "prompt": "Read @chat[Incident\tOne].",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    },
+    {
+      "name": "reference limit",
+      "repeat": { "token": "@run[one] ", "count": 65 },
+      "errorCode": "PROMPT_REFERENCE_LIMIT_EXCEEDED"
+    },
+    {
+      "name": "type length limit",
+      "prompt": "@abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklm[long]",
+      "errorCode": "PROMPT_REFERENCE_MALFORMED"
+    }
+  ]
+}

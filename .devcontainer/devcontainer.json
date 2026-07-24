@@ -1,0 +1,54 @@
+{
+    "name": "AcornOps Workspace",
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
+
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "16gb",
+        "storage": "64gb"
+    },
+
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:4": {
+            "version": "latest",
+            "moby": true,
+            "dockerDashComposeVersion": "latest",
+            "installDockerBuildx": true
+        },
+        "ghcr.io/devcontainers-extra/features/go-task:1": {}
+    },
+
+    "customizations": {
+        "codespaces": {
+            "repositories": {
+                "acornops/*": {
+                    "permissions": {
+                        "contents": "write",
+                        "pull_requests": "write",
+                        "workflows": "write"
+                    }
+                }
+            }
+        },
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-containers",
+                "redhat.vscode-yaml",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+
+    "postCreateCommand": "task setup && cd acornops-deployment && task install",
+
+    "forwardPorts": [
+        8088
+    ],
+
+    "portsAttributes": {
+        "8088": {
+            "label": "AcornOps local edge",
+            "onAutoForward": "notify"
+        }
+    }
+}

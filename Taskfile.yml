@@ -15,6 +15,7 @@ tasks:
       - node scripts/harness/check-conventional-commits.mjs --last 1
       - node scripts/harness/check-platform-harness.mjs
       - node scripts/harness/check-platform-contracts.mjs
+      - node scripts/harness/check-runtime-truth.mjs
 
   setup:
     desc: Clone missing child repositories over HTTPS and check workspace readiness
@@ -37,6 +38,11 @@ tasks:
     desc: Validate cross-repository contract manifests
     cmds:
       - node scripts/harness/check-platform-contracts.mjs
+
+  runtime-truth:check:
+    desc: Enforce frontend-fixture, full-stack seed, runtime identity, and Workflow V2 boundaries
+    cmds:
+      - node scripts/harness/check-runtime-truth.mjs
 
   commits:validate:
     desc: Validate Conventional Commits for workspace commits or messages

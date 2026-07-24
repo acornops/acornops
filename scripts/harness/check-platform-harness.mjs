@@ -197,7 +197,7 @@ function checkStandardRepo(repo) {
   expect(agents.split('\n').length <= 140, `${repoRelative(repo, 'AGENTS.md')} should remain short`);
   expect(!agents.includes('/Users/'), `${repoRelative(repo, 'AGENTS.md')} should use portable relative links`);
   expect(agents.includes('Agent-Assisted Development'), `${repoRelative(repo, 'AGENTS.md')} should describe agent-assisted development entrypoints`);
-  expect(agents.includes('acornops-workspace'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the workspace root`);
+  expect(agents.includes('`acornops` repository'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the canonical repository`);
   expect(!agents.includes('acornops-agent-standards'), `${repoRelative(repo, 'AGENTS.md')} must not reference the retired standards repository`);
   expect(agents.includes('.agents/skills/shared'), `${repoRelative(repo, 'AGENTS.md')} should describe shared skills`);
   expect(agents.includes('.agents/skills/local'), `${repoRelative(repo, 'AGENTS.md')} should describe local skills`);
@@ -255,14 +255,14 @@ function checkDocsSiteRepo(repo) {
   expect(agents.split('\n').length <= 140, `${repoRelative(repo, 'AGENTS.md')} should remain short`);
   expect(!agents.includes('/Users/'), `${repoRelative(repo, 'AGENTS.md')} should use portable relative links`);
   expect(agents.includes('Agent-Assisted Development'), `${repoRelative(repo, 'AGENTS.md')} should describe agent-assisted development entrypoints`);
-  expect(agents.includes('acornops-workspace'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the workspace root`);
+  expect(agents.includes('`acornops` repository'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the canonical repository`);
   expect(agents.includes('.agents/skills/shared'), `${repoRelative(repo, 'AGENTS.md')} should describe shared skills`);
   expect(agents.includes('.agents/skills/local'), `${repoRelative(repo, 'AGENTS.md')} should describe local skills`);
   expect(agents.includes('exact commands run'), `${repoRelative(repo, 'AGENTS.md')} should include handoff evidence`);
   expect(agents.includes('Conventional Commits'), `${repoRelative(repo, 'AGENTS.md')} should include commit policy`);
   expect(agents.includes('Vendor Neutrality'), `${repoRelative(repo, 'AGENTS.md')} should include vendor-neutrality policy`);
   expect(readme.includes('Agent-Assisted Development'), `${repoRelative(repo, 'README.md')} should describe agent-assisted development entrypoints`);
-  expect(contributing.includes('AcornOps workspace repository'), `${repoRelative(repo, 'CONTRIBUTING.md')} should point cross-repo work to the workspace`);
+  expect(contributing.includes('canonical AcornOps repository'), `${repoRelative(repo, 'CONTRIBUTING.md')} should point cross-repo work to the canonical repository`);
   expect(packageJson.scripts?.check === 'node scripts/check-docs.mjs', `${repoRelative(repo, 'package.json')} should expose docs structural checks`);
   expect(Boolean(packageJson.scripts?.validate), `${repoRelative(repo, 'package.json')} should expose docs validation`);
   expect(Boolean(packageJson.scripts?.links), `${repoRelative(repo, 'package.json')} should expose link validation`);
@@ -282,7 +282,7 @@ function checkStaticInfrastructureRepo(repo) {
   expect(agents.split('\n').length <= 140, `${repoRelative(repo, 'AGENTS.md')} should remain short`);
   expect(!agents.includes('/Users/'), `${repoRelative(repo, 'AGENTS.md')} should use portable relative links`);
   expect(agents.includes('Agent-Assisted Development'), `${repoRelative(repo, 'AGENTS.md')} should describe agent-assisted development entrypoints`);
-  expect(agents.includes('acornops-workspace'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the workspace root`);
+  expect(agents.includes('`acornops` repository'), `${repoRelative(repo, 'AGENTS.md')} should point cross-repo agent work to the canonical repository`);
   expect(agents.includes('.agents/skills/shared'), `${repoRelative(repo, 'AGENTS.md')} should describe shared skills`);
   expect(agents.includes('.agents/skills/local'), `${repoRelative(repo, 'AGENTS.md')} should describe local skills`);
   expect(readme.includes('helm repo add acornops'), `${repoRelative(repo, 'README.md')} should document the Helm repository install path`);

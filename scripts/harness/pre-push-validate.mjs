@@ -37,13 +37,13 @@ function runTaskChecks(repoName, repoPath) {
 }
 
 function runWorkspaceHarness() {
-  run('./scripts/harness/check-agent-harness.sh', workspaceRoot, 'acornops-workspace');
-  run('node scripts/harness/check-platform-harness.mjs', workspaceRoot, 'acornops-workspace');
+  run('./scripts/harness/check-agent-harness.sh', workspaceRoot, 'acornops');
+  run('node scripts/harness/check-platform-harness.mjs', workspaceRoot, 'acornops');
 }
 
 const repoRoot = gitOutput(['rev-parse', '--show-toplevel']);
 const repo = repoRoot === workspaceRoot
-  ? { name: 'acornops-workspace', absolutePath: workspaceRoot }
+  ? { name: 'acornops', absolutePath: workspaceRoot }
   : loadWorkspace().find((candidate) => candidate.absolutePath === repoRoot);
 
 if (!repo) {

@@ -8,13 +8,13 @@ validation command, runtime responsibility, or deployment model.
 Purpose: Distribution and operations layer for full-stack local bring-up, Docker-on-VM production deployment, and cluster-agent rollout orchestration.
 Primary Language: Bash + YAML
 Framework: Taskfile + Docker Compose orchestration
-Build Command: `task validate` (compose render validation) and `task local-up` or `task prod-up` for runtime assembly
+Build Command: `task validate` (compose render validation) and `task local-up` or `task prod-up` for runtime assembly; local startup includes seeded Kubernetes/VM targets with AgentK/AgentV
 Test Command: `task validate`
 Deployment Model: Docker Compose profiles (`local`, `prod`), central Kubernetes platform Helm chart, and workload-cluster agentk Helm rollout
 Infrastructure Tools: Docker Compose, Task, Helm, kubectl, Kubernetes manifests
 
 ## Repository: control-plane
-Purpose: Authoritative backend control plane for auth/session handling, workspace/target management, Kubernetes cluster APIs, run orchestration, and agent websocket routing.
+Purpose: Authoritative backend control plane for auth/session handling, workspace/target management, target-native chat, Workflow V2 scope compilation and delegation, run orchestration, and AgentK/AgentV websocket routing.
 Primary Language: TypeScript
 Framework: Node.js + Express
 Build Command: `npm run build`
@@ -24,7 +24,7 @@ Deployment Model: Docker Compose service with Postgres/Redis and optional OIDC/i
 Infrastructure Tools: Docker Compose, Postgres, Redis, OIDC providers (Dex/Keycloak)
 
 ## Repository: llm-gateway
-Purpose: LLM inference gateway and MCP tool broker with auth/policy enforcement, secret management, and provider abstraction.
+Purpose: LLM inference gateway and MCP tool broker with auth/policy enforcement, secret management, provider abstraction, and live catalog-backed exact tool references. Normal startup creates no MCP integration or provider credential.
 Primary Language: Python
 Framework: FastAPI + SQLAlchemy + Alembic
 Build Command: `docker compose up -d --build` (component-local) or image build via `deployments/Dockerfile.gateway`
@@ -64,7 +64,7 @@ Deployment Model: Dedicated `admin.acornops.dev` service with a server-held cont
 Infrastructure Tools: Node.js, control-plane `/admin/v1`, CSP, endpoint allowlisting
 
 ## Repository: agentk
-Purpose: Cluster-resident outbound-only Kubernetes agent for telemetry snapshots and JSON-RPC tool execution.
+Purpose: Cluster-resident outbound-only Kubernetes agent for telemetry snapshots, live target-capability advertisement, and JSON-RPC tool execution.
 Primary Language: TypeScript
 Framework: Node.js + ws + `@kubernetes/client-node`
 Build Command: `npm run build`
@@ -74,7 +74,7 @@ Deployment Model: Kubernetes manifests (`deploy/rbac.yaml`, `deploy/deployment.y
 Infrastructure Tools: Kubernetes RBAC/Deployment manifests, Docker Compose, k3d in CI
 
 ## Repository: agentv
-Purpose: Outbound-only Linux/systemd AgentV for read-only host snapshots, diagnostics, and JSON-RPC tool execution.
+Purpose: Outbound-only Linux/systemd AgentV for read-only host snapshots, diagnostics, live target-capability advertisement, and JSON-RPC tool execution.
 Primary Language: TypeScript
 Framework: Node.js + ws with Linux/systemd collector adapters
 Build Command: `npm run build`

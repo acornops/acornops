@@ -154,7 +154,7 @@ function checkGitHooksSetup(repos) {
   const expectedHooksPath = path.join(workspaceRoot, '.githooks');
 
   if (configuredHooksPath(workspaceRoot) !== expectedHooksPath) {
-    failures.push('acornops-workspace: core.hooksPath is not configured');
+    failures.push('acornops: core.hooksPath is not configured');
   }
 
   for (const repo of repos) {

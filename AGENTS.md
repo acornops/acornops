@@ -1,6 +1,7 @@
-# AcornOps Workspace Agent Entry Point
+# AcornOps Repository Agent Entry Point
 
-Use this file as the map for cross-repository work in the AcornOps workspace.
+Use this file as the map for cross-repository work from the canonical AcornOps
+repository and its local workspace.
 Durable repository-specific knowledge belongs in each child repository.
 
 ## Start Here
@@ -86,6 +87,7 @@ When working inside a child repo, read that repo's `AGENTS.md`.
 - `task setup` when validating developer onboarding changes
 - `./scripts/workspace/doctor.mjs` for local workspace readiness
 - `./scripts/workspace/status.mjs` for workspace state inspection
+- `task runtime-truth:check` to reject runtime fixture identities, fallback definitions, and Workflow V1 branches
 - `task validate` for the workspace validation entrypoint
 
 ## High-Risk Areas

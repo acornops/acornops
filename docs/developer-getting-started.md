@@ -7,7 +7,7 @@ to repo-local commands without turning product repositories into submodules.
 ## First-Time Setup
 
 ```bash
-git clone https://github.com/acornops/acornops-workspace.git acornops
+git clone https://github.com/acornops/acornops.git
 cd acornops
 task setup
 ```
@@ -74,3 +74,14 @@ npm run validate
 
 The workspace should not hide repo-specific setup until those setup commands are
 codified in `workspace.yaml` or the child repo itself.
+
+## Local Data Paths
+
+- Run `npm run dev` in `management-console` for standalone browser fixtures. No
+  control plane is required and fixture state resets on reload.
+- Run `task local-up` in `acornops-deployment` for the real full stack with its
+  persistent database, seeded Kubernetes and VM targets, AgentK, and AgentV.
+- Run `task local-up-cluster-fixture` when only AgentK should connect; the
+  seeded VM remains visible but offline.
+- Run `task local-up-target-fixtures` as the explicit equivalent of the default
+  seeded target setup.

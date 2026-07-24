@@ -49,7 +49,7 @@ function checkAgentsLineLimit(repoName, repoPath) {
 
 const repoRoot = gitOutput(['rev-parse', '--show-toplevel']);
 const repo = repoRoot === workspaceRoot
-  ? { name: 'acornops-workspace', absolutePath: workspaceRoot }
+  ? { name: 'acornops', absolutePath: workspaceRoot }
   : loadWorkspace().find((candidate) => candidate.absolutePath === repoRoot);
 
 if (!repo) {
