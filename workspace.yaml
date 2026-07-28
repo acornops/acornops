@@ -28,13 +28,13 @@ repositories:
     validate: task validate
 
   - name: agentk
-    path: ./k8s-agent
+    path: ./agentk
     remote: https://github.com/acornops/k8s-agent.git
     default_branch: main
     validate: npm run validate
 
   - name: agentv
-    path: ./vm-agent
+    path: ./agentv
     remote: https://github.com/acornops/vm-agent.git
     default_branch: main
     validate: npm run validate
