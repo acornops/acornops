@@ -113,6 +113,13 @@ sequenceDiagram
 `MCP_INDIVIDUAL_USER_PRINCIPAL_REQUIRED`. Missing, erroneous, or tool-incomplete
 connections fail before contacting the remote server.
 
+Interactive target chat may degrade by omitting credential-dependent MCP tools
+whose exact connection is missing, erroneous, or tool-incomplete for the pinned
+user. The same tools are removed from model schemas and run-token authority, and
+the capability preview reports the omission. An explicitly referenced tool,
+installation-level failure, workflow, schedule, or automation remains
+fail-closed.
+
 ## Ownership transitions
 
 Relational metadata and the encrypted secret backend cannot share one atomic
@@ -155,7 +162,9 @@ sequenceDiagram
 
 The management console confirms both destructive transitions and immediately
 opens the existing credential dialog for the new owner mode. Until connection
-verification succeeds, the installation is missing and all runs remain blocked.
+verification succeeds, fail-closed workflows, schedules, automations, and
+explicit tool references remain blocked. Interactive target chat may proceed
+without the unavailable installation tools.
 
 ## Security invariants
 
