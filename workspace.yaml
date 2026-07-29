@@ -29,13 +29,13 @@ repositories:
 
   - name: agentk
     path: ./agentk
-    remote: https://github.com/acornops/k8s-agent.git
+    remote: https://github.com/acornops/agentk.git
     default_branch: main
     validate: npm run validate
 
   - name: agentv
     path: ./agentv
-    remote: https://github.com/acornops/vm-agent.git
+    remote: https://github.com/acornops/agentv.git
     default_branch: main
     validate: npm run validate
 
