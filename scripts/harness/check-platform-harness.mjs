@@ -230,7 +230,7 @@ function checkPlatformAdminRequirements(repo) {
     expect(requirements.includes(marker), `${repoRelative(repo, 'docs/product-specs/current-requirements.md')} is missing ${marker}`);
   }
   expect(baseline.authority === 'docs/product-specs/current-requirements.md', `${repo.name} executable requirements authority must be repo-local`);
-  expect(baseline.expectedRuntime?.adminRouteCount === 18, `${repo.name} requirements must lock the current 18-route subset`);
+  expect(baseline.expectedRuntime?.adminRouteCount === 25, `${repo.name} requirements must lock the current 25-route subset`);
   expect(baseline.expectedRuntime?.allowedScopeCount === 8, `${repo.name} requirements must lock the current 8-scope subset`);
   expect(baseline.required?.length >= 10 && baseline.excluded?.length >= 10 && baseline.blocked?.length >= 4, `${repo.name} requirements coverage is incomplete`);
   expect(packageJson.scripts?.['requirements:check'] === 'node scripts/check-requirements.mjs', `${repo.name} must expose requirements:check`);
