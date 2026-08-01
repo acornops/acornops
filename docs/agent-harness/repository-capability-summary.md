@@ -14,7 +14,7 @@ Deployment Model: Docker Compose profiles (`local`, `prod`), central Kubernetes 
 Infrastructure Tools: Docker Compose, Task, Helm, kubectl, Kubernetes manifests
 
 ## Repository: control-plane
-Purpose: Authoritative backend control plane for auth/session handling, workspace/target management, target-native chat, Workflow V2 scope compilation and delegation, run orchestration, and AgentK/AgentV websocket routing.
+Purpose: Authoritative backend control plane for auth/session handling, workspace/target management, target-native chat, Workflow scope compilation and delegation, run orchestration, and AgentK/AgentV websocket routing.
 Primary Language: TypeScript
 Framework: Node.js + Express
 Build Command: `npm run build`

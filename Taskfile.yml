@@ -40,7 +40,7 @@ tasks:
       - node scripts/harness/check-platform-contracts.mjs
 
   runtime-truth:check:
-    desc: Enforce frontend-fixture, full-stack seed, runtime identity, and Workflow V2 boundaries
+    desc: Enforce frontend-fixture, full-stack seed, runtime identity, and Workflow boundaries
     cmds:
       - node scripts/harness/check-runtime-truth.mjs
 

@@ -86,7 +86,7 @@ const runtimeRules = [
   },
   {
     pattern: /\b(?:orchestratorAgentId|orchestrator_agent_id)\b/,
-    message: 'Workflow V1 orchestrator field appears in production runtime code'
+    message: 'Retired Workflow orchestrator field appears in production runtime code'
   },
   {
     pattern: /\ballowedTools\s*:\s*\[(?!\s*\])/,
@@ -189,8 +189,59 @@ const migrationRules = [
     message: 'repository-review template or provider-profile identities are forbidden in migrations'
   }
 ];
-for (const file of filesUnder('control-plane/migrations/control-plane')) {
+const controlPlaneMigrations = filesUnder('control-plane/migrations/control-plane')
+  .filter((file) => file.endsWith('.sql'));
+if (controlPlaneMigrations.length !== 1
+  || !controlPlaneMigrations[0].endsWith('/001_initial_schema.sql')) {
+  failures.push('control-plane: unreleased schema must contain only 001_initial_schema.sql');
+}
+for (const file of controlPlaneMigrations) {
   checkFile(file, migrationRules);
+}
+
+const targetToolSync = readFileSync(
+  path.join(root, 'control-plane/src/services/target-built-in-tool-sync.ts'),
+  'utf8'
+);
+if (/refreshAgentReadiness|refreshWorkflowReadiness|repository-(?:agents|workflows)/.test(targetToolSync)) {
+  failures.push('control-plane: target connector lifecycle must not refresh Agent or Workflow readiness');
+}
+const workspaceMcpSpecs = readFileSync(
+  path.join(root, 'control-plane/src/services/workspace-mcp-tool-specs.ts'),
+  'utf8'
+);
+if (/listWorkspaceTargetSnapshot|resolveTargetRunTools|listTargetMcpTools/.test(workspaceMcpSpecs)) {
+  failures.push('control-plane: Targets MCP catalog must not be derived from workspace target inventory');
+}
+
+const targetsCatalog = readFileSync(
+  path.join(root, 'control-plane/src/services/targets-mcp-catalog.ts'),
+  'utf8'
+);
+const catalogToolNames = new Set(
+  [...targetsCatalog.matchAll(/^\s+name: '([^']+)',?$/gm)].map((match) => match[1])
+);
+const agentkIndex = readFileSync(path.join(root, 'agentk/src/tools/index.ts'), 'utf8');
+const agentkToolNames = new Set();
+for (const match of agentkIndex.matchAll(/import \{ (\w+Tool) \} from '\.\/atomic\/([^']+)'/g)) {
+  const definitionFile = match[2].replace(/\.js$/, '.ts');
+  const definition = readFileSync(path.join(root, `agentk/src/tools/atomic/${definitionFile}`), 'utf8');
+  const name = definition.match(new RegExp(`export const ${match[1]}: ToolDefinition = \\{[\\s\\S]*?name: '([^']+)'`))?.[1];
+  if (name) agentkToolNames.add(name);
+}
+const agentvTools = readFileSync(path.join(root, 'agentv/src/tools/index.ts'), 'utf8');
+const agentvToolNames = new Set(
+  [...agentvTools.matchAll(/define\(\{ name: '([^']+)'/g)].map((match) => match[1])
+);
+for (const name of new Set([...agentkToolNames, ...agentvToolNames])) {
+  if (!catalogToolNames.has(name)) {
+    failures.push(`control-plane: stable Targets MCP catalog is missing connector tool ${name}`);
+  }
+}
+for (const name of catalogToolNames) {
+  if (!agentkToolNames.has(name) && !agentvToolNames.has(name)) {
+    failures.push(`control-plane: stable Targets MCP catalog contains unknown connector tool ${name}`);
+  }
 }
 
 for (const file of filesUnder('control-plane/src')) {
