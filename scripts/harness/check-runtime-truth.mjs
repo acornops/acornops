@@ -198,6 +198,19 @@ if (controlPlaneMigrations.length !== 1
 for (const file of controlPlaneMigrations) {
   checkFile(file, migrationRules);
 }
+const controlPlaneBaseline = readFileSync(
+  path.join(root, 'control-plane/migrations/control-plane/001_initial_schema.sql'),
+  'utf8'
+);
+const definitionTableBody = (tableName) => controlPlaneBaseline.match(
+  new RegExp(`CREATE TABLE ${tableName} \\(([\\s\\S]*?)\\n\\);`)
+)?.[1] || '';
+if (/\borigin\b/.test(definitionTableBody('agent_definitions'))) {
+  failures.push('control-plane: Agent definitions must not retain origin compatibility metadata');
+}
+if (/\b(?:origin|template_id|starter_prompt)\b/.test(definitionTableBody('workflow_definitions'))) {
+  failures.push('control-plane: Workflow definitions must not retain template compatibility metadata');
+}
 
 const targetToolSync = readFileSync(
   path.join(root, 'control-plane/src/services/target-built-in-tool-sync.ts'),
@@ -223,11 +236,14 @@ const catalogToolNames = new Set(
 );
 const agentkIndex = readFileSync(path.join(root, 'agentk/src/tools/index.ts'), 'utf8');
 const agentkToolNames = new Set();
-for (const match of agentkIndex.matchAll(/import \{ (\w+Tool) \} from '\.\/atomic\/([^']+)'/g)) {
+for (const match of agentkIndex.matchAll(/import\s+\{([^}]+)\}\s+from '\.\/atomic\/([^']+)'/g)) {
   const definitionFile = match[2].replace(/\.js$/, '.ts');
   const definition = readFileSync(path.join(root, `agentk/src/tools/atomic/${definitionFile}`), 'utf8');
-  const name = definition.match(new RegExp(`export const ${match[1]}: ToolDefinition = \\{[\\s\\S]*?name: '([^']+)'`))?.[1];
-  if (name) agentkToolNames.add(name);
+  for (const imported of match[1].split(',').map((value) => value.trim())) {
+    if (!imported.endsWith('Tool')) continue;
+    const name = definition.match(new RegExp(`export const ${imported}: ToolDefinition = \\{[\\s\\S]*?name: '([^']+)'`))?.[1];
+    if (name) agentkToolNames.add(name);
+  }
 }
 const agentvTools = readFileSync(path.join(root, 'agentv/src/tools/index.ts'), 'utf8');
 const agentvToolNames = new Set(
