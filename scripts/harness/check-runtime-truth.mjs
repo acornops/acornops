@@ -219,45 +219,45 @@ const targetToolSync = readFileSync(
 if (/refreshAgentReadiness|refreshWorkflowReadiness|repository-(?:agents|workflows)/.test(targetToolSync)) {
   failures.push('control-plane: target connector lifecycle must not refresh Agent or Workflow readiness');
 }
-const workspaceMcpSpecs = readFileSync(
-  path.join(root, 'control-plane/src/services/workspace-mcp-tool-specs.ts'),
-  'utf8'
-);
-if (/listWorkspaceTargetSnapshot|resolveTargetRunTools|listTargetMcpTools/.test(workspaceMcpSpecs)) {
-  failures.push('control-plane: Targets MCP catalog must not be derived from workspace target inventory');
+if (!targetToolSync.includes('agentGateway.listAgentTools(targetId)')) {
+  failures.push('control-plane: target connector tools must be discovered from the connected target agent');
+}
+if (existsSync(path.join(root, 'control-plane/src/services/targets-mcp-catalog.ts'))
+  || existsSync(path.join(root, 'control-plane/src/services/workspace-mcp-tool-specs.ts'))) {
+  failures.push('control-plane: removed workspace/static Targets MCP catalogs must not return');
 }
 
-const targetsCatalog = readFileSync(
-  path.join(root, 'control-plane/src/services/targets-mcp-catalog.ts'),
+const agentTargetsCatalog = readFileSync(
+  path.join(root, 'control-plane/src/services/agent-targets-mcp-catalog.ts'),
   'utf8'
 );
-const catalogToolNames = new Set(
-  [...targetsCatalog.matchAll(/^\s+name: '([^']+)',?$/gm)].map((match) => match[1])
+const agentTargetsToolNamesBody = agentTargetsCatalog.match(
+  /AGENT_TARGETS_MCP_TOOL_NAMES\s*=\s*\[([\s\S]*?)\]/
+)?.[1] || '';
+const agentTargetsToolNames = new Set(
+  [...agentTargetsToolNamesBody.matchAll(/'([^']+)'/g)].map((match) => match[1])
 );
-const agentkIndex = readFileSync(path.join(root, 'agentk/src/tools/index.ts'), 'utf8');
-const agentkToolNames = new Set();
-for (const match of agentkIndex.matchAll(/import\s+\{([^}]+)\}\s+from '\.\/atomic\/([^']+)'/g)) {
-  const definitionFile = match[2].replace(/\.js$/, '.ts');
-  const definition = readFileSync(path.join(root, `agentk/src/tools/atomic/${definitionFile}`), 'utf8');
-  for (const imported of match[1].split(',').map((value) => value.trim())) {
-    if (!imported.endsWith('Tool')) continue;
-    const name = definition.match(new RegExp(`export const ${imported}: ToolDefinition = \\{[\\s\\S]*?name: '([^']+)'`))?.[1];
-    if (name) agentkToolNames.add(name);
-  }
+const expectedAgentTargetsToolNames = new Set(['list_targets', 'get_target', 'list_target_issues']);
+if (agentTargetsToolNames.size !== expectedAgentTargetsToolNames.size
+  || [...expectedAgentTargetsToolNames].some((name) => !agentTargetsToolNames.has(name))) {
+  failures.push('control-plane: Agent Targets MCP must expose only target discovery and issue-reading tools');
 }
-const agentvTools = readFileSync(path.join(root, 'agentv/src/tools/index.ts'), 'utf8');
-const agentvToolNames = new Set(
-  [...agentvTools.matchAll(/define\(\{ name: '([^']+)'/g)].map((match) => match[1])
+const agentTargetsExecutor = readFileSync(
+  path.join(root, 'control-plane/src/services/agent-targets-mcp-executor.ts'),
+  'utf8'
 );
-for (const name of new Set([...agentkToolNames, ...agentvToolNames])) {
-  if (!catalogToolNames.has(name)) {
-    failures.push(`control-plane: stable Targets MCP catalog is missing connector tool ${name}`);
-  }
+if (!agentTargetsExecutor.includes('repo.listTargets(workspaceId')
+  || !agentTargetsExecutor.includes('repo.getTarget(workspaceId, targetId)')
+  || /\bagentI[dD]\b|\bagent_id\b/.test(agentTargetsExecutor)) {
+  failures.push('control-plane: Agent Targets MCP execution must query the current workspace inventory without an Agent-target binding');
 }
-for (const name of catalogToolNames) {
-  if (!agentkToolNames.has(name) && !agentvToolNames.has(name)) {
-    failures.push(`control-plane: stable Targets MCP catalog contains unknown connector tool ${name}`);
-  }
+const workflowDerivedCapabilities = readFileSync(
+  path.join(root, 'control-plane/src/services/workflow-derived-capabilities.ts'),
+  'utf8'
+);
+if (!workflowDerivedCapabilities.includes('workflow.agentIds.map')
+  || /targetIds|target_ids|listTargets|getTarget/.test(workflowDerivedCapabilities)) {
+  failures.push('control-plane: Workflow capabilities must derive only from assigned Agents, never targets');
 }
 
 for (const file of filesUnder('control-plane/src')) {
