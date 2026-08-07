@@ -67,6 +67,7 @@ contracts between them.
 | [`acornops-deployment`](https://github.com/acornops/acornops-deployment) | Docker Compose and Kubernetes deployment tracks, compatibility metadata, and runbooks |
 | [`charts`](https://github.com/acornops/charts) | Public Helm repository mirror for packaged platform and agent charts |
 | [`docs-website`](https://github.com/acornops/docs-website) | Public operator, deployment, integration, architecture, and API documentation |
+| [`platform-admin-console`](https://github.com/acornops/platform-admin-console) | Governance-only platform administration UI and admin API BFF for workspace identity, plan assignment, lifecycle state, and audit workflows |
 
 ## Develop AcornOps
 
