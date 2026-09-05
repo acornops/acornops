@@ -74,7 +74,7 @@ Deployment Model: Kubernetes manifests (`deploy/rbac.yaml`, `deploy/deployment.y
 Infrastructure Tools: Kubernetes RBAC/Deployment manifests, Docker Compose, k3d in CI
 
 ## Repository: agentv
-Purpose: Outbound-only Linux/systemd AgentV for read-only host snapshots, diagnostics, live target-capability advertisement, and JSON-RPC tool execution.
+Purpose: Outbound-only Linux/systemd AgentV for host snapshots, diagnostics, live target-capability advertisement, and JSON-RPC tool execution. Supports read-only and explicitly configured read-write access, with read-only as the default; current writes are approval-gated systemd restarts restricted to an exact root-owned service allowlist.
 Primary Language: TypeScript
 Framework: Node.js + ws with Linux/systemd collector adapters
 Build Command: `npm run build`

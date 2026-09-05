@@ -109,6 +109,13 @@ AgentK and AgentV are outbound-only target agents. They connect back to
 the control plane over WebSocket, publish target snapshots, and receive
 JSON-RPC tool calls relayed by the control plane. AgentK operates inside
 workload clusters; AgentV runs as a Linux/systemd process for VM targets.
+Both agents support read-only and explicitly configured read-write access,
+with read-only as the default. AgentK writes are constrained by Kubernetes
+RBAC and tool policy. AgentV's current write capability is limited to restarting
+exact systemd services allowlisted during VM onboarding and bound to enrollment;
+the root-owned helper policy and control-plane approval remain independent gates.
+Selecting read-write for a run cannot grant access beyond the installed agent's
+configured permissions.
 
 The deployment repository assembles these services into runnable topologies. It
 does not own component runtime code; it owns Compose and Kubernetes wiring,
