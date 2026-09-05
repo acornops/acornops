@@ -191,9 +191,13 @@ const migrationRules = [
 ];
 const controlPlaneMigrations = filesUnder('control-plane/migrations/control-plane')
   .filter((file) => file.endsWith('.sql'));
-if (controlPlaneMigrations.length !== 1
-  || !controlPlaneMigrations[0].endsWith('/001_initial_schema.sql')) {
-  failures.push('control-plane: unreleased schema must contain only 001_initial_schema.sql');
+const controlPlaneMigrationNames = controlPlaneMigrations.map((file) => path.basename(file)).sort();
+if (controlPlaneMigrationNames[0] !== '001_initial_schema.sql'
+  || controlPlaneMigrationNames.some((name, index) => {
+    const sequence = Number(name.slice(0, 3));
+    return !/^\d{3}_[a-z0-9_]+\.sql$/.test(name) || sequence !== index + 1;
+  })) {
+  failures.push('control-plane: baseline and forward migrations must use one contiguous ordered sequence');
 }
 for (const file of controlPlaneMigrations) {
   checkFile(file, migrationRules);
