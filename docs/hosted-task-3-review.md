@@ -1,0 +1,40 @@
+# Task 3 independent console review
+
+Reviewed 2026-09-06 against `hosted-task-3-brief.md`, the approved `oss-hosted-readiness-plan.md`, management baseline `00bc694`, platform-admin baseline `0ed183d`, and the current uncommitted implementation. Read-only product review; this document is the reviewer's only authored repository change. Control-plane policy implementation was read for actual response shapes and mutation semantics; no database was used.
+
+## Findings and fix verification
+
+All five findings are resolved in the reviewed source. No open actionable code-review findings remain. This is not a substitute for the implementer's pending full-validation/browser handoff. Original reproductions are retained for regression coverage.
+
+- **P2 — Suspended directory rows fabricate resource counts.** `management-console/src/pages/WorkspacesPage.tsx` renders `workspace.members.length` and `clusterCount ?? 0` for suspended safe projections, which intentionally contain neither count. Reproduction: suspend a populated workspace, load the directory, observe zero members/clusters although resources and memberships were retained. Omit unavailable counts for suspended rows. Reported to the implementer.
+- **P2 — Noncurrent suspended workspace caches are retained.** `management-console/src/app/useWorkspaceAccessMonitor.ts` clears session, composer and VM caches only when the currently selected workspace is suspended. Reproduction: visit workspace B to populate caches, switch to active A, suspend B, and let the membership poll detect B. B is marked suspended and cluster arrays are filtered, but the other B caches remain. Invalidate B's caches without freezing active A's mounted cache hooks; their generation currently prevents writes after a global clear. Reported to the implementer.
+- **P2 — Accepted baseline is internally contradictory.** `platform-admin-console/docs/product-specs/current-requirements.md` REQ-WSP-002 still prohibits quota usage/override exposure and REQ-WSP-004 still says suspension does not modify workloads. `DESIGN.md` retains contradictory current rules and DEV-014. An appended acceptance paragraph does not make these active statements coherent. Replace the superseded current statements while preserving historical records explicitly as such. Executable requirements checks currently pass despite the contradictions.
+- **P2 — Stale-policy confirmation cannot review the refreshed policy.** `platform-admin-console/src/components/WorkspacePolicy.tsx` refetches after version conflict and updates the version and external-hold indicator, but the effective limits/usage and selected current-plan summary remain behind the modal in the old parent snapshot. Reproduction: open a plan dialog, change policy in another admin session, submit to receive a version conflict, then follow “Review the latest state.” The latest policy summary is not available in the dialog. Show the refreshed relevant state before the deliberate retry. Reported; implementer assessing a bounded in-dialog summary.
+
+## Finding resolved during review
+
+- **P2 — HTTP suspension initially lost the refreshed public reason.** The HTTP 403 path latched blocking before safe discovery; recording the later suspended projection did not dispatch another access-change event. The displayed inert workspace consequently retained its earlier generic reason. The implementer added a metadata-only change event when a blocked safe projection changes. Independent event-sequence regression now confirms that block-then-discovery produces a second event carrying the public reason and `metadataOnly: true`. Cache clearing is skipped for metadata-only updates.
+
+Fix verification for the other findings:
+
+- Directory counters now render only for nonsuspended rows; suspended rows display the safe public reason instead of a fabricated resource summary. Confirmed directly in the JSX.
+- A first access-block event clears session/composer/VM caches regardless of the selected workspace, closes copilot, and increments a content generation used as the `AppShell` key. This remounts active descendants with the new session-cache generation; metadata-only events do not clear or remount. Verified the callback and keyed shell together, and confirmed no `useSessionCachedState` hooks reside outside that shell in `src/app`. Background-workspace browser regression remains an implementation-evidence responsibility.
+- REQ-WSP-002 and REQ-WSP-004 now directly state the accepted effective-limit/usage and cancellation/admin-hold semantics. Current DESIGN rules were replaced, and DEV-014 explicitly records replacement of its historical read-only exclusion. Verified by targeted text inspection, then reran the requirements/source/route tests (51/51 pass).
+- Version conflicts now clear confirmation, reset retained-resource consent and display the newly fetched policy summary inside the dialog. Exact-name confirmation derives from the refreshed policy workspace name. The summary now displays the observed current plan name and key, distinguishing it from the selected target. Source-verified after the final label change; requirements and React-source tests rerun successfully (34/34).
+
+## Positive source findings
+
+Initial bootstrap awaits safe membership discovery before cluster fetches and user/workspace publication. Suspended DTOs have no permission capabilities, and App returns the blocking surface before workload children. Workspace request and current run request guards reject latched suspension before fetch; tracked requests/streams are aborted. HTTP 403 and the producer's named `workspace_suspended` SSE event request safe-state refresh; 15-second polling covers idle tabs. Restore uses a fresh overview document load and no prior action replay. Unknown deep links use the single safe endpoint before a normal workspace read.
+
+PAC uses fixed same-origin BFF routes with selected policy fields, not tenant run/log records. The source producer's hold timestamp is `createdAt`, which the BFF correctly projects despite the brief's shorthand `suspendedAt`. Effective quotas and five execution pools align with producer source. Plan and lifecycle intents contain observed versions and UUID request IDs; identical retries reuse the body, while explicit retain-existing changes create a new intent. Lifecycle requests can target only the admin hold, exact-name confirmation remains, and completion copy distinguishes remaining suspension. Existing human authorization, CSRF and recent-auth code remains in place.
+
+Requirement classification: replacing REQ-WSP-002 / EXC-015 / DEV-014 read-only exclusions; preserving exact-name and deterministic-reason controls in REQ-WSP-004 / EXC-016 / EXC-017; adding versioned policy intents, independent hold display and explicit retain-existing handling. Quota override editing remains excluded.
+
+## Independent validation
+
+- `VITE_APP_DATA_MODE=control-plane npm test -- src/services/control-plane/workspaceAccessState.test.ts`: **3/3 passed**, including reruns after the public-reason, background cache and directory fixes.
+- PAC `ADMIN_CONSOLE_DATA_MODE=control-plane node --import tsx --test test/admin-route-policy.test.mjs test/requirements-baseline.test.mjs test/react-ui.test.ts`: **51/51 passed**.
+- PAC `ADMIN_CONSOLE_DATA_MODE=control-plane node --import tsx --test test/server.test.mjs`: **37/37 passed**. Initial sandbox run failed on loopback `listen EPERM`; authorized escalation reran successfully using test-owned temporary ports.
+- Standalone EventTarget block-then-safe-discovery assertion: **passed** (public reason and metadata-only event verified).
+
+Not independently run: full console validate/build commands, live Chromium/Playwright specs, live CP/browser integration, and runtime database tests. Implementer owns console browser/full-validation evidence; root owns backend/runtime validation. Browser test sources were reviewed, not treated as execution evidence. Existing user platform ports were untouched. Keyboard focus and screen-reader behavior have source-level review only; no independent assistive-technology claim is made.

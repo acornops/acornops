@@ -1,0 +1,18 @@
+# Task 1: transactional policy and holds
+
+Work only in `/Users/tjtanjin/Desktop/acornops/hosted-readiness/control-plane`. Read AGENTS.md and relevant local/shared skills. Do not spawn subagents or commit/push. Other work is happening outside your files.
+
+Implement the approved policy foundation and hold API end to end, tests first. Requirements:
+
+- Five execution pools (`chat`, `agent`, `workflow`, `autoTriage`, `insights`) each `{maxConcurrentRuns:number|null,maxOutstandingRuns:number|null}`. Extend config/admin plan type and quota resolver. Omitted pool = null pair, partial pair invalid, finite positive ints outstanding>=concurrent. Unknown fields rejected within executionLimits. No execution overrides or admission rates.
+- Add narrow policy-read, plan-write, external-hold-write scopes. Implement endpoint-level scope alternatives without bypassing BFF human scope, recent auth or CSRF. Broad current read/write credentials stay valid.
+- GET /admin/v1/workspace-plans and /admin/v1/workspaces/:workspaceId/policy provide configured catalogue and bounded snapshot (workspace id/name, plan, effective limits, explicit overrides, policyVersion, usage including five pools, holds). For now execution usage can query a reservation table you create or return zeros until next task wires it; tell parent chosen interface.
+- New additive migration 007 for policy_version, receipt table and admin/external suspension holds (check constrained); backfill old suspended rows conservatively.
+- Extend plan/quotas/suspend/restore schemas/controllers with requestId, expectedPolicyVersion, overLimitBehavior reject|retain_existing (default reject), source admin|external (default admin), publicReason. Preserve existing names/response fields before/after and exact workspaceName confirmation. Narrow machine mutations require request ID/version. External scope cannot touch admin hold, omission, overrides or plan.
+- New focused repository/service operation locks workspace, checks existing receipt first (same canonical body hash returns original response, differing content 409 IDEMPOTENCY_CONFLICT), checks expected version, counts current usage transactionally, updates plan/overrides or selected hold, effective lifecycle/timestamp, advances version only on state changes, inserts authoritative admin audit and receipt in same transaction. Audit failure rolls back. Legacy calls without preconditions allowed, duplicate lifecycle old errors preserved. Clear only selected hold, effective onset retained while any hold exists. No private reasons in tenant audit metadata.
+- Preserve overrides on plan changes; explicit retain_existing retains excess. Unknown plan WORKSPACE_PLAN_NOT_CONFIGURED 400; version conflicts409; missing preconditions400. No-op still checks precondition. New operation should accept audit input produced by adminAuditEventInput.
+- Add catalogue preflight for assigned keys and immutable active plan limit definitions/canonical hash if tractable; report remaining part precisely rather than placeholders.
+- Use transactional helpers small focused files. Tests meaningful, preserve existing tests by additive compatibility; existing test mocks may need appropriate updates.
+- Update producer contract docs only for your implemented policy portion (not mirrors or other repos). Parent owns workspace plan/progress docs.
+
+Run targeted new/admin/quotas tests and typecheck/style. DB fixture env will be supplied shortly. Report at `/Users/tjtanjin/Desktop/acornops/hosted-readiness/docs/hosted-task-1-report.md`: changed files, public/internal signatures, tests and remaining concerns. Return a concise report pointer.
