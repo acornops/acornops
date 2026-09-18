@@ -17,6 +17,7 @@ task setup
 task workspace:bootstrap -- --dry-run
 ./scripts/workspace/bootstrap.mjs --dry-run
 ./scripts/workspace/bootstrap.mjs
+./scripts/sync/githooks.sh
 ```
 
 Check local tools, remotes, and checkout readiness:
