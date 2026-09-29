@@ -10,13 +10,14 @@ or local validation commands.
 
 ## Local Development
 
-Bootstrap missing child repositories:
+Bootstrap missing child repositories and configure the shared Git hooks:
 
 ```bash
 task setup
 task workspace:bootstrap -- --dry-run
 ./scripts/workspace/bootstrap.mjs --dry-run
 ./scripts/workspace/bootstrap.mjs
+./scripts/sync/githooks.sh
 ```
 
 Check local tools, remotes, and checkout readiness:
