@@ -177,6 +177,7 @@ expect_contains "AGENTS.md" "./scripts/workspace/doctor.mjs"
 expect_contains "AGENTS.md" "./scripts/workspace/status.mjs"
 expect_contains "AGENTS.md" ".agents/skills/local"
 expect_contains "AGENTS.md" 'The parent workspace does not use `.agents/skills/local`'
+expect_contains "AGENTS.md" "platform-admin-console"
 expect_contains "AGENTS.md" "docs/agent-harness/agent-handoff-policy.md"
 expect_contains "workspace.yaml" "control-plane"
 expect_contains "workspace.yaml" "management-console"
@@ -279,6 +280,7 @@ child_repos=(
   "agentv"
   "llm-gateway"
   "management-console"
+  "platform-admin-console"
   "charts"
 )
 
