@@ -234,8 +234,8 @@ Internal-only services:
 - `llm-gateway`: LLM provider gateway, MCP broker, secrets backend,
   and gateway policy.
 - `agentk`: workload-cluster agent and agent Helm chart.
-- `agentv`: read-only Linux/systemd VM agent, packaging, and local
-  mock collectors.
+- `agentv`: Linux/systemd VM agent, packaging, and local mock collectors with
+  read-only default access and approval-gated scoped write support.
 - `acornops-deployment`: full-stack deployment tracks, platform Helm chart,
   runbooks, and release matrix.
 - `docs-website`: public documentation site.
