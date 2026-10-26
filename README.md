@@ -59,11 +59,12 @@ contracts between them.
 | Repository | Responsibility |
 | --- | --- |
 | [`management-console`](https://github.com/acornops/management-console) | Browser experience for workspaces, targets, runs, Agents, Workflows, approvals, and tools |
+| [`platform-admin-console`](https://github.com/acornops/platform-admin-console) | Governance-only admin UI and BFF for workspace identity, plans, lifecycle state, and platform administration audit |
 | [`control-plane`](https://github.com/acornops/control-plane) | Authentication, workspace APIs, target registration, run state, webhooks, and agent coordination |
 | [`execution-engine`](https://github.com/acornops/execution-engine) | Durable run execution, streaming events, retries, cancellation, and tool coordination |
 | [`llm-gateway`](https://github.com/acornops/llm-gateway) | Model-provider routing, MCP brokering, secrets, and policy enforcement |
 | [`agentk`](https://github.com/acornops/agentk) | Outbound Kubernetes discovery, snapshots, logs, and controlled tool execution |
-| [`agentv`](https://github.com/acornops/agentv) | Outbound Linux/systemd snapshots, logs, and read-only built-in tools |
+| [`agentv`](https://github.com/acornops/agentv) | Outbound Linux/systemd snapshots, logs, and read-only-by-default built-in tools with approval-gated scoped writes |
 | [`acornops-deployment`](https://github.com/acornops/acornops-deployment) | Docker Compose and Kubernetes deployment tracks, compatibility metadata, and runbooks |
 | [`charts`](https://github.com/acornops/charts) | Public Helm repository mirror for packaged platform and agent charts |
 | [`docs-website`](https://github.com/acornops/docs-website) | Public operator, deployment, integration, architecture, and API documentation |
