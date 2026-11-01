@@ -63,6 +63,19 @@ expectCounterpart('control-plane', 'llm-gateway', 'llm-gateway', 'control-plane'
 expectCounterpart('control-plane', 'agentk', 'agentk', 'control-plane');
 expectCounterpart('control-plane', 'agentv', 'agentv', 'control-plane');
 expectCounterpart('execution-engine', 'llm-gateway', 'llm-gateway', 'execution-engine');
+// Each repository validates its producer/consumer locally; this gate owns copy equality.
+for (const [left, right] of [
+  ['agentv/src/windows/fixtures/snapshot-contract.json', 'control-plane/test/fixtures/windows-snapshot-contract.json'],
+  ['agentv/scripts/windows-tests/generated-command-fixtures.json', 'control-plane/test/fixtures/windows-generated-commands.json'],
+  ['agentv/docs/contracts/windows-read-runtime.md', 'control-plane/docs/contracts/windows-read-runtime.md']
+]) {
+  try {
+    expect(readFileSync(path.join(root, left)).equals(readFileSync(path.join(root, right))),
+      `Counterpart mismatch between ${left} and ${right}`);
+  } catch {
+    expect(false, `Missing or unreadable counterpart ${left} or ${right}`);
+  }
+}
 if (failures.length > 0) {
   console.error('Cross-repo contract checks failed:\n');
   for (const failure of failures) {
