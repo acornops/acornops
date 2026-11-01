@@ -22,8 +22,8 @@ jobs:
           fetch-depth: 0
       - name: Validate agent harness
         run: ./scripts/harness/check-agent-harness.sh
-      - name: Validate counterpart gate regression
-        run: node --test scripts/harness/check-platform-contracts.test.mjs
+      - name: Validate workspace gate regressions
+        run: node --test scripts/harness/*.test.mjs
       - name: Validate pull request title
         if: github.event_name == 'pull_request'
         env:

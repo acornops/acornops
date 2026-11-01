@@ -4,6 +4,13 @@ This summary describes the current AcornOps repository responsibilities and
 validation surfaces. Keep it current when a repository changes its canonical
 validation command, runtime responsibility, or deployment model.
 
+## Repository: acornops
+Purpose: Coordinate independent child repositories, shared harness guidance and cross-repository contract gates.
+Primary Language: JavaScript and shell
+Test Command: `node --test scripts/harness/*.test.mjs`
+Canonical Validation: `task validate` (includes harness regression tests)
+Deployment Model: Development workspace; no product runtime
+
 ## Repository: acornops-deployment
 Purpose: Distribution and operations layer for full-stack local bring-up, Docker-on-VM production deployment, and cluster-agent rollout orchestration.
 Primary Language: Bash + YAML

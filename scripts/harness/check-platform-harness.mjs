@@ -224,14 +224,19 @@ function checkPlatformAdminRequirements(repo) {
 
   const requirements = readRepo(repo, 'docs/product-specs/current-requirements.md');
   const baseline = JSON.parse(readRepo(repo, 'docs/product-specs/requirements-baseline.json'));
+  const contract = JSON.parse(readRepo(repo, 'docs/contracts/manifest.json')).counterparts?.['control-plane'];
   const packageJson = JSON.parse(readRepo(repo, 'package.json'));
   const skill = readRepo(repo, '.agents/skills/local/platform-admin-change/SKILL.md');
   for (const marker of ['## Authority And Change Protocol', 'historical evidence, not current requirements', '## Superseded And Excluded Behavior', '## Contract-Blocked Capabilities']) {
     expect(requirements.includes(marker), `${repoRelative(repo, 'docs/product-specs/current-requirements.md')} is missing ${marker}`);
   }
   expect(baseline.authority === 'docs/product-specs/current-requirements.md', `${repo.name} executable requirements authority must be repo-local`);
-  expect(baseline.expectedRuntime?.adminRouteCount === 27, `${repo.name} requirements must lock the current 27-route subset`);
-  expect(baseline.expectedRuntime?.allowedScopeCount === 8, `${repo.name} requirements must lock the current 8-scope subset`);
+  // The child owns the exact runtime subset; its requirements checker validates
+  // code against this baseline. The parent checks agreement with its contract.
+  expect(Array.isArray(contract?.platformAdminPaths) && contract.platformAdminPaths.length > 0 && baseline.expectedRuntime?.adminRouteCount === contract.platformAdminPaths.length,
+    `${repo.name} requirements route count must match the nonempty child contract subset`);
+  expect(Array.isArray(contract?.requiredScopes) && contract.requiredScopes.length > 0 && baseline.expectedRuntime?.allowedScopeCount === contract.requiredScopes.length,
+    `${repo.name} requirements scope count must match the nonempty child contract subset`);
   expect(baseline.required?.length >= 10 && baseline.excluded?.length >= 10 && baseline.blocked?.length >= 4, `${repo.name} requirements coverage is incomplete`);
   expect(packageJson.scripts?.['requirements:check'] === 'node scripts/check-requirements.mjs', `${repo.name} must expose requirements:check`);
   expect(packageJson.scripts?.validate?.includes('npm run requirements:check'), `${repo.name} validate must run requirements:check`);

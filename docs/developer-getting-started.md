@@ -53,6 +53,13 @@ task workspace:fetch
 task validate
 ```
 
+Child paths declared in the workspace may be independent checkouts or symlinks
+to existing checkouts. The parent ignores these root paths and rejects tracked
+child content. `task validate` and parent CI run isolated regression tests for
+these boundaries and the contract gates. Platform-admin route and scope counts
+are checked against the child's contract manifest; its own `requirements:check`
+validates those counts against the runtime implementation.
+
 Use `task workspace:update` when you want to fast-forward local clean default
 branches after fetching. It skips repositories with local changes, repositories
 that are not on their default branch, and branches with unpushed local commits.
