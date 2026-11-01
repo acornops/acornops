@@ -148,9 +148,9 @@ for skill_dir in "${ROOT_DIR}"/.agents/skills/shared/*; do
   fi
 done
 
-expect_contains ".gitignore" "/control-plane/"
-expect_contains ".gitignore" "/docs-website/"
-expect_contains ".gitignore" "/charts/"
+expect_contains ".gitignore" "/control-plane"
+expect_contains ".gitignore" "/docs-website"
+expect_contains ".gitignore" "/charts"
 expect_contains ".gitignore" "/security/"
 expect_contains ".gitignore" "/change-sets/active/*.md"
 expect_contains ".gitignore" "/change-sets/completed/*.md"
@@ -279,12 +279,13 @@ child_repos=(
   "agentv"
   "llm-gateway"
   "management-console"
+  "platform-admin-console"
   "charts"
 )
 
 if command -v git >/dev/null 2>&1 && git -C "${ROOT_DIR}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   for repo in "${child_repos[@]}"; do
-    if ! git -C "${ROOT_DIR}" check-ignore -q "${repo}/"; then
+    if ! git -C "${ROOT_DIR}" check-ignore -q "${repo}"; then
       failures+=("Child repository ${repo}/ must be ignored by the parent workspace")
     fi
     if [[ -n "$(git -C "${ROOT_DIR}" ls-files -- "${repo}")" ]]; then

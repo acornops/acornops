@@ -12,6 +12,7 @@ tasks:
     desc: Validate workspace standards, harness, and contracts
     cmds:
       - ./scripts/harness/check-agent-harness.sh
+      - node --test scripts/harness/*.test.mjs
       - node scripts/harness/check-conventional-commits.mjs --last 1
       - node scripts/harness/check-platform-harness.mjs
       - node scripts/harness/check-platform-contracts.mjs

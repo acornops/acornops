@@ -11,6 +11,11 @@ AcornOps uses three layers:
 2. Repo-local harness: each standalone GitHub repository.
 3. Platform harness: deployment/integration repository.
 
+Parent CI and `task validate` run the workspace gate regression tests. Child
+paths may be checkout directories or symlinks and must remain ignored and
+untracked by the parent. Runtime requirements stay child-owned; parent checks
+compare declared counts with child contract manifests rather than fixed copies.
+
 The underlying agent-harness rationale is captured in
 [`openai-harness-engineering.md`](openai-harness-engineering.md), which maps
 OpenAI Codex-style repo navigation, editing, command execution, and test

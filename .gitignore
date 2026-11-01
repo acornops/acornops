@@ -1,17 +1,17 @@
-# Child repositories managed independently.
-/acornops-deployment/
-/control-plane/
-/docs-website/
-/website/
-/execution-engine/
-/agentk/
-/agentv/
-/k8s-agent/
-/vm-agent/
-/llm-gateway/
-/management-console/
-/platform-admin-console/
-/charts/
+# Child repositories managed independently (directories or symlinks).
+/acornops-deployment
+/control-plane
+/docs-website
+/website
+/execution-engine
+/agentk
+/agentv
+/k8s-agent
+/vm-agent
+/llm-gateway
+/management-console
+/platform-admin-console
+/charts
 
 # Local review and planning artifacts.
 /security/
