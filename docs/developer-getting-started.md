@@ -14,7 +14,7 @@ task setup
 
 `task setup` clones missing child repositories from `workspace.yaml` over HTTPS,
 normalizes existing matching GitHub remotes to the workspace manifest, and then
-runs the workspace doctor.
+runs the workspace doctor and configures the shared Git hooks.
 
 ## Understand The Platform
 
@@ -37,6 +37,7 @@ If Task is not installed yet, use the underlying scripts directly:
 ```bash
 ./scripts/workspace/bootstrap.mjs
 ./scripts/workspace/doctor.mjs
+./scripts/sync/githooks.sh
 ```
 
 ## Preview Before Cloning
